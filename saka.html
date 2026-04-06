@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bukayo Saka — Statsdex Data Story</title>
+<meta name="description" content="The complete data profile of Bukayo Saka. Big Game Index, career arc, peer scatter and the UCL elevation story xG misses.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0d1117;--bg2:#0d1b2a;--bg3:#161b22;--player:#f0f6fc;--gold:#EDBB00;--white:#f0f6fc;--gray:#8b949e;--gray-dim:#3d444d;--barca:#A50044;--pass:#4CAF50;--def:#2196F3;--atkhi:#ffd60a;--atklo:#e63946}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:'DM Mono',monospace;overflow-x:hidden;line-height:1.6}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 48px;height:60px;display:flex;align-items:center;justify-content:space-between;background:rgba(13,17,23,0.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(240,246,252,0.1)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--white);text-decoration:none}
+.nav-logo span{color:var(--barca)}
+.nav-player{font-size:11px;letter-spacing:2px;color:var(--gray);text-transform:uppercase}
+.nav-back{font-size:11px;letter-spacing:1px;color:var(--gray);text-decoration:none;transition:color .2s}
+.nav-back:hover{color:var(--white)}
+.progress{position:fixed;top:60px;left:0;height:2px;background:var(--player);width:0%;z-index:99;transition:width .1s linear}
+.act-hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 40px;position:relative;overflow:hidden}
+.hero-bg-num{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:40vw;color:rgba(240,246,252,0.025);line-height:1;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%)}
+.hero-eyebrow{font-size:11px;letter-spacing:4px;color:var(--gray);text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp .9s .3s forwards}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,14vw,160px);letter-spacing:2px;line-height:0.9;color:var(--white);opacity:0;animation:fadeUp .9s .5s forwards}
+.hero-pos{font-size:12px;letter-spacing:4px;color:var(--gray);text-transform:uppercase;margin:20px 0 48px;opacity:0;animation:fadeUp .9s .7s forwards}
+.hero-number-block{opacity:0;animation:fadeUp .9s .9s forwards}
+.hero-big-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,20vw,200px);color:var(--player);line-height:1}
+.hero-num-label{font-size:12px;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-top:8px}
+.hero-scroll{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeUp .8s 1.4s forwards}
+.hero-scroll span{font-size:10px;letter-spacing:3px;color:var(--gray-dim);text-transform:uppercase}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--player),transparent);animation:pulse 2s infinite}
+.act{min-height:80vh;display:flex;flex-direction:column;justify-content:center;padding:100px 0;position:relative}
+.act-inner{max-width:1100px;margin:0 auto;padding:0 48px;width:100%}
+.act-label{font-size:10px;letter-spacing:4px;color:var(--gray);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:12px;opacity:0;transform:translateY(20px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.act-label::before{content:'';width:32px;height:1px;background:var(--player)}
+.act-label.vis{opacity:1;transform:translateY(0)}
+.act-headline{font-family:'Playfair Display',serif;font-size:clamp(28px,4.5vw,52px);color:var(--white);line-height:1.15;margin-bottom:20px;opacity:0;transform:translateY(24px);transition:all .8s .1s cubic-bezier(.16,1,.3,1)}
+.act-headline.vis{opacity:1;transform:translateY(0)}
+.act-body{font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,20px);color:var(--gray);line-height:1.7;max-width:680px;font-style:italic;opacity:0;transform:translateY(24px);transition:all .8s .2s cubic-bezier(.16,1,.3,1)}
+.act-body.vis{opacity:1;transform:translateY(0)}
+.act-footnote{font-size:10px;letter-spacing:1.5px;color:var(--gray-dim);margin-top:16px;opacity:0;transition:opacity .8s .4s}
+.act-footnote.vis{opacity:1}
+.act-split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.act-split-reverse{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.act-split-reverse .act-text{order:2}
+.act-split-reverse .act-chart-wrap{order:1}
+.act-chart-wrap{opacity:0;transform:translateX(30px);transition:all .9s .3s cubic-bezier(.16,1,.3,1)}
+.act-chart-wrap.vis{opacity:1;transform:translateX(0)}
+.act-split-reverse .act-chart-wrap{transform:translateX(-30px)}
+.act-split-reverse .act-chart-wrap.vis{transform:translateX(0)}
+.chart-box{background:var(--bg2);border:1px solid var(--gray-dim);border-radius:8px;overflow:hidden;padding:24px}
+.act-signature{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 40px;position:relative;overflow:hidden;background:var(--bg2)}
+.sig-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 50% 50%,rgba(240,246,252,0.04) 0%,transparent 70%);pointer-events:none}
+.sig-label{font-size:11px;letter-spacing:4px;color:var(--gray);text-transform:uppercase;margin-bottom:32px;opacity:0;transition:all .8s .1s}
+.sig-label.vis{opacity:1}
+.sig-number{font-family:'Bebas Neue',sans-serif;font-size:clamp(140px,22vw,280px);color:var(--player);line-height:1;opacity:0;transform:scale(0.85);transition:all 1s .2s cubic-bezier(.16,1,.3,1)}
+.sig-number.vis{opacity:1;transform:scale(1)}
+.sig-unit{font-size:14px;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-bottom:32px;opacity:0;transition:all .8s .4s}
+.sig-unit.vis{opacity:1}
+.sig-headline{font-family:'Playfair Display',serif;font-size:clamp(18px,2.5vw,28px);color:var(--white);max-width:700px;line-height:1.4;margin-bottom:16px;opacity:0;transition:all .8s .5s;font-style:italic}
+.sig-headline.vis{opacity:1}
+.sig-sub{font-size:11px;letter-spacing:1.5px;color:var(--gray-dim);opacity:0;transition:all .8s .7s}
+.sig-sub.vis{opacity:1}
+.comp-names{display:flex;align-items:center;gap:24px;margin-bottom:32px;flex-wrap:wrap}
+.comp-name{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px}
+.comp-vs{font-size:14px;letter-spacing:3px;color:var(--gray);text-transform:uppercase}
+.act-gate{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 40px;position:relative;overflow:hidden;background:var(--bg2);border-top:1px solid var(--gray-dim)}
+.gate-blur{position:relative;margin:48px auto;max-width:700px;height:200px;background:var(--bg3);border:1px solid var(--gray-dim);border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.gate-blur-inner{filter:blur(8px);pointer-events:none;font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gray-dim);text-align:left;padding:20px;line-height:1.4}
+.gate-lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(13,17,23,0.4);backdrop-filter:blur(2px)}
+.gate-lock-icon{font-size:32px;color:var(--player)}
+.gate-lock-text{font-size:11px;letter-spacing:2px;color:var(--gray);text-transform:uppercase}
+.gate-headline{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,72px);letter-spacing:2px;color:var(--white);margin-bottom:16px;opacity:0;transform:translateY(20px);transition:all .8s .1s}
+.gate-headline.vis{opacity:1;transform:translateY(0)}
+.gate-body{font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,20px);color:var(--gray);max-width:560px;line-height:1.7;font-style:italic;margin-bottom:40px;opacity:0;transition:all .8s .2s}
+.gate-body.vis{opacity:1}
+.gate-cta{display:inline-flex;align-items:center;gap:16px;background:var(--player);color:var(--bg);font-size:13px;letter-spacing:2px;text-transform:uppercase;padding:18px 40px;text-decoration:none;transition:all .3s;border:1px solid var(--player);opacity:0;transition:all .8s .3s;font-weight:700}
+.gate-cta.vis{opacity:1}
+.gate-cta:hover{background:transparent;color:var(--player)}
+.gate-secondary{font-size:11px;color:var(--gray-dim);margin-top:20px;letter-spacing:1px;opacity:0;transition:all .8s .5s}
+.gate-secondary.vis{opacity:1}
+.act-divider{height:1px;background:linear-gradient(to right,transparent,var(--gray-dim),transparent);margin:0 48px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+@media(max-width:768px){nav{padding:0 20px}.act-inner{padding:0 24px}.act-split,.act-split-reverse{grid-template-columns:1fr}.act-split-reverse .act-text{order:1}.act-split-reverse .act-chart-wrap{order:2}.act-chart-wrap{transform:none!important}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<nav>
+  <a href="index.html" class="nav-logo"><span>Stats</span>dex</a>
+  <span class="nav-player">Bukayo Saka · Data Story</span>
+  <a href="index.html" class="nav-back">← All Stories</a>
+</nav>
+
+<!-- ACT 1: HERO -->
+<section class="act-hero">
+  <div class="hero-bg-num">24</div>
+  <div class="hero-eyebrow">Arsenal FC · Right Wing · Age 24</div>
+  <h1 class="hero-name">Bukayo<br>Saka</h1>
+  <p class="hero-pos">The data story · 2018/19 – 2025/26</p>
+  <div class="hero-number-block">
+    <div class="hero-big-num">175</div>
+    <div class="hero-num-label">Big Game Index · UCL vs Premier League</div>
+  </div>
+  <div class="hero-scroll"><span>Scroll to read</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- ACT 2: CAREER ARC -->
+<section class="act">
+  <div class="act-inner">
+    <div class="act-split">
+      <div class="act-text">
+        <div class="act-label reveal">Career Arc</div>
+        <h2 class="act-headline reveal">Seven seasons. One direction.</h2>
+        <p class="act-body reveal">Saka joined Arsenal's first team at 17. He has never left. The arc shows a player who built his peak deliberately — each season incrementally better, the 23/24 high of 0.8 GI the summit. The dip in 25/26 is the most interesting data point of all.</p>
+        <p class="act-footnote reveal">Goal Involvement (GI) per 90 · All competitions · 2018/19–2025/26 · Source: Sofascore</p>
+      </div>
+      <div class="act-chart-wrap reveal">
+        <div class="chart-box"><canvas id="careerArcCanvas" width="500" height="320"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act-divider"></div>
+
+<!-- ACT 3: SIGNATURE NUMBER -->
+<section class="act-signature">
+  <div class="sig-bg"></div>
+  <div class="sig-label reveal">The big game finding</div>
+  <div class="sig-number reveal">175</div>
+  <div class="sig-unit reveal">Big Game Index · UCL GI vs Premier League GI</div>
+  <p class="sig-headline reveal">"In the Champions League, Saka is a different player. His Goal Involvement almost doubles. His shot volume rises. His passing accuracy climbs. The data says: the bigger the stage, the better he gets."</p>
+  <div class="sig-sub reveal">UCL GI/90: 0.7 · PL GI/90: 0.4 · BGI: 175 · Season 25/26 · Statsdex Big Game Index</div>
+</section>
+
+<!-- ACT 4: RADAR -->
+<section class="act">
+  <div class="act-inner">
+    <div class="act-split-reverse">
+      <div class="act-text">
+        <div class="act-label reveal">Season Profile</div>
+        <h2 class="act-headline reveal">The most balanced wide forward in England.</h2>
+        <p class="act-body reveal">No extreme spikes. No obvious weaknesses. Saka's radar is almost symmetrical — a player who does everything at a high level rather than one thing at an extraordinary level. That balance is harder to build than it looks.</p>
+        <p class="act-footnote reveal">10 metrics · Premier League wide forward peer group · 2025/26 · Statsdex</p>
+      </div>
+      <div class="act-chart-wrap reveal">
+        <div class="chart-box" style="display:flex;align-items:center;justify-content:center">
+          <canvas id="radarCanvas" width="420" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act-divider"></div>
+
+<!-- ACT 5: COMPARISON RADAR -->
+<section class="act">
+  <div class="act-inner">
+    <div class="act-split">
+      <div class="act-text">
+        <div class="act-label reveal">Comparison</div>
+        <div class="comp-names">
+          <span class="comp-name" style="color:var(--player)">Saka</span>
+          <span class="comp-vs">vs</span>
+          <span class="comp-name" style="color:var(--barca)">Yamal</span>
+        </div>
+        <p class="act-body reveal">Where Yamal overwhelms, Saka delivers. The comparison radar shows the fundamental difference: Yamal's polygon has violent peaks — Duel Drive, Threat Volume, Goal Involvement. Saka's polygon has almost no valleys. Two entirely different models of excellence.</p>
+        <p class="act-footnote reveal">Same 8 metrics · normalised to peer group · both players 2025/26 · Source: Sofascore</p>
+      </div>
+      <div class="act-chart-wrap reveal">
+        <div class="chart-box" style="display:flex;align-items:center;justify-content:center">
+          <canvas id="dualRadarCanvas" width="420" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act-divider"></div>
+
+<!-- ACT 6: PIZZA -->
+<section class="act">
+  <div class="act-inner">
+    <div class="act-split-reverse">
+      <div class="act-text">
+        <div class="act-label reveal">Percentile Profile</div>
+        <h2 class="act-headline reveal">The precision finisher.</h2>
+        <p class="act-body reveal">Cross Accuracy at 31.3% — the highest of any wide forward in our dataset. Pass Security at 78.6%. Tackles at 55th percentile — he defends. Duel Drive at 48th — he doesn't waste energy on dribbles that won't work. Every number tells you something about intelligence.</p>
+        <p class="act-footnote reveal">Estimated percentile ranks vs Premier League wide forwards · 2025/26 · Statsdex</p>
+      </div>
+      <div class="act-chart-wrap reveal">
+        <div class="chart-box" style="display:flex;align-items:center;justify-content:center">
+          <canvas id="pizzaCanvas" width="420" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act-divider"></div>
+
+<!-- ACT 7: POLAR -->
+<section class="act">
+  <div class="act-inner">
+    <div class="act-split">
+      <div class="act-text">
+        <div class="act-label reveal">Type of Player</div>
+        <h2 class="act-headline reveal">Precision Finisher.</h2>
+        <p class="act-body reveal">Saka's archetype is defined by his output index sitting above his creativity index — he converts more than he creates. His control score is the highest of the three players in our dataset. His defense score reflects genuine defensive contribution. The profile of a complete modern winger.</p>
+        <p class="act-footnote reveal">Four family indices · Control · Creativity · Output · Defense · Statsdex composite</p>
+      </div>
+      <div class="act-chart-wrap reveal">
+        <div class="chart-box" style="display:flex;align-items:center;justify-content:center">
+          <canvas id="polarCanvas" width="420" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act-divider"></div>
+
+<!-- ACT 8: SCATTER -->
+<section class="act">
+  <div class="act-inner">
+    <div class="act-split-reverse">
+      <div class="act-text">
+        <div class="act-label reveal">Peer Group Mapping</div>
+        <h2 class="act-headline reveal">Exactly where the model puts him.</h2>
+        <p class="act-body reveal">Unlike Yamal — who consistently outperforms his xG — Saka lands almost precisely on the expectation line every season. He finishes what he creates, creates what he finishes, and the model has him perfectly mapped. That consistency is itself a form of excellence.</p>
+        <p class="act-footnote reveal">20 top European wide forwards · min 25 apps · 2025/26 · dot size = GIS · Statsdex</p>
+      </div>
+      <div class="act-chart-wrap reveal">
+        <div class="chart-box"><canvas id="scatterCanvas" width="460" height="360"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act-divider"></div>
+
+<!-- ACT 9: HIDDEN METRIC -->
+<section class="act-signature" style="background:var(--bg)">
+  <div class="sig-bg"></div>
+  <div class="sig-label reveal">The hidden story</div>
+  <div style="display:flex;align-items:center;gap:32px;justify-content:center;flex-wrap:wrap;margin:32px 0 20px">
+    <div style="text-align:center">
+      <div style="font-size:11px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:8px">Premier League</div>
+      <div class="sig-number reveal" style="font-size:clamp(80px,12vw,140px)">0.4</div>
+      <div style="font-size:11px;color:var(--gray);margin-top:4px">GI / 90</div>
+    </div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,80px);color:var(--gray-dim)">→</div>
+    <div style="text-align:center">
+      <div style="font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:8px">Champions League</div>
+      <div class="sig-number reveal" style="font-size:clamp(80px,12vw,140px);color:var(--gold)">0.7</div>
+      <div style="font-size:11px;color:var(--gold);margin-top:4px">GI / 90</div>
+    </div>
+  </div>
+  <p class="sig-headline reveal">"The question wasn't whether Saka is a big-game player. The question was whether the data could prove it. Big Game Index 175 — his Goal Involvement nearly doubles in the UCL. The answer is yes."</p>
+  <div class="sig-sub reveal">BGI = (UCL metric / PL metric) × 100 · Statsdex original metric · Season 25/26</div>
+</section>
+
+<!-- GATE -->
+<section class="act-gate">
+  <h2 class="gate-headline reveal">This is where<br>the free story ends.</h2>
+  <p class="gate-body reveal">The full Statsdex report on Bukayo Saka includes all 42 charts, the complete career delta heatmap, cross-competition analysis across eight seasons, the consistency score breakdown, and the most thorough analytical profile of this player available outside a professional scouting department.</p>
+  <div class="gate-blur">
+    <div class="gate-blur-inner">UCL vs PL split · Career delta heatmap · Consistency score<br>Age-adjusted curves · In-season form analysis<br>EVI dual-axis · Peer group full scatter · Role evolution</div>
+    <div class="gate-lock"><div class="gate-lock-icon">⬡</div><div class="gate-lock-text">Statsdex Premium</div></div>
+  </div>
+  <a href="#" class="gate-cta reveal">Join Statsdex Premium →</a>
+  <p class="gate-secondary reveal">Full 42-chart PDF report · Competition split analysis · Monthly player stories</p>
+</section>
+
+<script>
+const SAKA={
+  seasons:['18/19','19/20','20/21','21/22','22/23','23/24','24/25','25/26'],
+  ages:[17,18,19,20,21,22,23,24],
+  gi:[0,0.5,0.3,0.5,0.6,0.8,0.9,0.4],
+  xg:[0,0,0,0,0.30,0.40,0.39,0.28],
+  gls:[0,0.1,0.2,0.3,0.4,0.5,0.4,0.3],
+  xa:[0,0,0,0,0.17,0.31,0.35,0.25],
+  keyp:[1.4,1.4,1.3,2.0,2.1,2.6,2.8,2.5],
+  bcc:[0.7,0.5,0.2,0.3,0.3,0.5,0.9,0.4],
+  drp:[0,0.9,0.8,0.8,0.7,1.0,0.6,1.9],
+  tack:[0.7,1.7,1.1,1.1,1.6,2.0,1.5,1.4],
+  int:[0.7,0.7,0.9,0.7,0.4,0.4,0.3,0.7],
+  aps:[23.9,27.7,27.9,25.3,28.0,31.7,25.7,24.2],
+  apsp:[77.8,80.8,82.2,79.2,81.7,83.3,83.4,78.6],
+};
+const BG='#0d1117',BG2='#0d1b2a',PLAYER='#f0f6fc',GOLD='#EDBB00',GRAY='#8b949e',GDIM='#3d444d';
+const BARCA='#A50044',PASS='#4CAF50',DEF='#2196F3',ATKHI='#ffd60a',ATKLO='#e63946';
+function wa(h,a){const[r,g,b]=[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];return`rgba(${r},${g},${b},${a})`}
+const PEERS=[
+  {xa:0.38,gls:0.62,gis:14.2,n:'Salah'},{xa:0.22,gls:0.55,gis:12.1,n:'Vini Jr'},
+  {xa:0.19,gls:0.61,gis:11.8,n:'Mbappé'},{xa:0.26,gls:0.45,gis:10.9,n:'Raphinha'},
+  {xa:0.24,gls:0.38,gis:9.8,n:'Son'},{xa:0.21,gls:0.41,gis:9.2,n:'Pulisic'},
+  {xa:0.16,gls:0.33,gis:8.4,n:'Diaz'},{xa:0.18,gls:0.25,gis:8.1,n:'Doku'},
+  {xa:0.14,gls:0.20,gis:7.2,n:'Gnonto'},{xa:0.15,gls:0.27,gis:7.8,n:'Zirkzee'},
+  {xa:0.20,gls:0.35,gis:9.0,n:'Leao'},{xa:0.22,gls:0.30,gis:9.5,n:'Foden'},
+  {xa:0.33,gls:0.60,gis:15.8,n:'Yamal'},{xa:0.28,gls:0.40,gis:10.5,n:'Olise'},
+  {xa:0.15,gls:0.42,gis:9.3,n:'Pedro'},
+  {xa:0.25,gls:0.30,gis:10.1,n:'Saka',hero:true},
+];
+let anims={};
+function animate(key,fn,dur=1200){
+  if(anims[key])return;
+  const t0=performance.now();
+  function fr(now){const t=Math.min((now-t0)/dur,1);const e=t<.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1;fn(e);if(t<1)anims[key]=requestAnimationFrame(fr);else anims[key]=null;}
+  anims[key]=requestAnimationFrame(fr);
+}
+function sc(canvas){
+  const dpr=window.devicePixelRatio||1;
+  const w=canvas.offsetWidth||canvas.width,h=canvas.offsetHeight||canvas.height;
+  canvas.width=w*dpr;canvas.height=h*dpr;
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  canvas.style.width=w+'px';canvas.style.height=h+'px';
+  return{ctx,w,h};
+}
+
+function drawArc(canvas,p=1){
+  const{ctx,w,h}=sc(canvas);
+  ctx.fillStyle=BG2;ctx.fillRect(0,0,w,h);
+  const pL=48,pR=24,pT=24,pB=48,cw=w-pL-pR,ch=h-pT-pB;
+  const n=SAKA.seasons.length,mx=1.1;
+  [0,0.3,0.6,0.9].forEach(v=>{
+    const y=pT+ch*(1-v/mx);
+    ctx.strokeStyle=wa(GDIM,.5);ctx.lineWidth=1;ctx.setLineDash([3,4]);
+    ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(w-pR,y);ctx.stroke();
+    ctx.fillStyle=GRAY;ctx.font='10px monospace';ctx.textAlign='right';
+    ctx.fillText(v.toFixed(1),pL-6,y+4);ctx.setLineDash([]);
+  });
+  ctx.textAlign='center';ctx.fillStyle=GRAY;ctx.font='10px monospace';
+  SAKA.seasons.forEach((s,i)=>{
+    const x=pL+i*(cw/(n-1));
+    ctx.fillText(s,x,h-pB+16);
+    ctx.strokeStyle=wa(GDIM,.3);ctx.lineWidth=1;ctx.setLineDash([2,3]);
+    ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,h-pB);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=wa(GRAY,.5);ctx.font='9px monospace';
+    ctx.fillText('Age '+SAKA.ages[i],x,h-pB+28);
+  });
+  const dl=Math.floor((n-1)*p),fr=(n-1)*p-dl;
+  ctx.strokeStyle=wa(GOLD,.35);ctx.lineWidth=1.5;ctx.setLineDash([4,4]);
+  ctx.beginPath();
+  for(let i=0;i<=dl&&i<n;i++){const x=pL+i*(cw/(n-1)),y=pT+ch*(1-SAKA.xg[i]/mx);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+  if(fr>0&&dl<n-1){const x=pL+(dl+fr)*(cw/(n-1)),yv=SAKA.xg[dl]+fr*(SAKA.xg[dl+1]-SAKA.xg[dl]),y=pT+ch*(1-yv/mx);ctx.lineTo(x,y);}
+  ctx.stroke();ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(pL,pT+ch);
+  for(let i=0;i<=dl&&i<n;i++){const x=pL+i*(cw/(n-1)),y=pT+ch*(1-SAKA.gi[i]/mx);ctx.lineTo(x,y);}
+  if(fr>0&&dl<n-1){const x=pL+(dl+fr)*(cw/(n-1)),yv=SAKA.gi[dl]+fr*(SAKA.gi[dl+1]-SAKA.gi[dl]),y=pT+ch*(1-yv/mx);ctx.lineTo(x,y);}
+  const lx=fr>0?pL+(dl+fr)*(cw/(n-1)):pL+Math.min(dl,n-1)*(cw/(n-1));
+  ctx.lineTo(lx,pT+ch);ctx.closePath();ctx.fillStyle=wa(PLAYER,.08);ctx.fill();
+  ctx.strokeStyle=PLAYER;ctx.lineWidth=2.5;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();
+  for(let i=0;i<=dl&&i<n;i++){const x=pL+i*(cw/(n-1)),y=pT+ch*(1-SAKA.gi[i]/mx);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+  if(fr>0&&dl<n-1){const x=pL+(dl+fr)*(cw/(n-1)),yv=SAKA.gi[dl]+fr*(SAKA.gi[dl+1]-SAKA.gi[dl]),y=pT+ch*(1-yv/mx);ctx.lineTo(x,y);}
+  ctx.stroke();
+  for(let i=0;i<=dl&&i<n;i++){
+    const x=pL+i*(cw/(n-1)),y=pT+ch*(1-SAKA.gi[i]/mx);
+    ctx.beginPath();ctx.arc(x,y,i===n-1?7:4,0,Math.PI*2);
+    ctx.fillStyle=i===n-1?GOLD:PLAYER;ctx.fill();
+    if(i===n-1||i===0){ctx.fillStyle=i===n-1?GOLD:PLAYER;ctx.font='bold 11px monospace';ctx.textAlign='center';ctx.fillText(SAKA.gi[i].toFixed(1),x,y-14);}
+  }
+  ctx.font='10px monospace';ctx.textAlign='left';ctx.fillStyle=PLAYER;ctx.fillRect(pL,12,20,3);
+  ctx.fillStyle=PLAYER;ctx.fillText('Goal Involvement (GI)',pL+26,16);
+  ctx.strokeStyle=wa(GOLD,.5);ctx.lineWidth=1.5;ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(pL+180,14);ctx.lineTo(pL+200,14);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle=GOLD;ctx.fillText('xG',pL+206,16);
+}
+
+function drawRadar(canvas,pVals,sVals,p=1){
+  const{ctx,w,h}=sc(canvas);
+  ctx.fillStyle=BG2;ctx.fillRect(0,0,w,h);
+  const cx=w/2,cy=h/2+10,R=Math.min(w,h)*0.34;
+  const metrics=['Goals','xG','ChI','SprR','Duel Drive','Tackles','Int','Pass Sec','Cross Acc','xA'];
+  const mCols=[ATKHI,ATKHI,PASS,PASS,BARCA,ATKLO,ATKLO,DEF,PASS,PASS];
+  const n=metrics.length;
+  const angles=metrics.map((_,i)=>-Math.PI/2+i*2*Math.PI/n);
+  [.25,.5,.75,1].forEach(r=>{
+    ctx.strokeStyle=wa(GDIM,r===1?.6:.3);ctx.lineWidth=r===1?1.5:.5;ctx.setLineDash(r===1?[]:[2,3]);
+    ctx.beginPath();angles.forEach((a,i)=>{const px=cx+Math.cos(a)*R*r,py=cy+Math.sin(a)*R*r;i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);});ctx.closePath();ctx.stroke();ctx.setLineDash([]);
+  });
+  angles.forEach(a=>{ctx.strokeStyle=wa(GDIM,.4);ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);ctx.stroke();});
+  if(sVals){
+    ctx.beginPath();sVals.forEach((v,i)=>{const r=v*p,px=cx+Math.cos(angles[i])*R*r,py=cy+Math.sin(angles[i])*R*r;i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);});
+    ctx.closePath();ctx.fillStyle=wa(BARCA,.15);ctx.fill();ctx.strokeStyle=wa(BARCA,.6);ctx.lineWidth=2;ctx.stroke();
+  }
+  ctx.beginPath();pVals.forEach((v,i)=>{const r=v*p,px=cx+Math.cos(angles[i])*R*r,py=cy+Math.sin(angles[i])*R*r;i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);});
+  ctx.closePath();ctx.fillStyle=wa(PLAYER,.2);ctx.fill();ctx.strokeStyle=PLAYER;ctx.lineWidth=2.5;ctx.stroke();
+  pVals.forEach((v,i)=>{const r=v*p,px=cx+Math.cos(angles[i])*R*r,py=cy+Math.sin(angles[i])*R*r;ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.fillStyle=PLAYER;ctx.fill();});
+  metrics.forEach((m,i)=>{const lx=cx+Math.cos(angles[i])*(R+20),ly=cy+Math.sin(angles[i])*(R+20);ctx.font='bold 9px monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=mCols[i];ctx.fillText(m,lx,ly);});
+  if(sVals){
+    ctx.font='9px monospace';ctx.textAlign='left';ctx.textBaseline='alphabetic';
+    ctx.fillStyle=PLAYER;ctx.fillRect(14,14,16,3);ctx.fillStyle=PLAYER;ctx.fillText('Saka',34,20);
+    ctx.fillStyle=wa(BARCA,.7);ctx.fillRect(80,14,16,3);ctx.fillStyle=BARCA;ctx.fillText('Yamal',100,20);
+  }
+}
+
+function drawPizza(canvas,p=1){
+  const{ctx,w,h}=sc(canvas);
+  ctx.fillStyle=BG2;ctx.fillRect(0,0,w,h);
+  const cx=w/2,cy=h/2+8,R=Math.min(w,h)*0.35;
+  const metrics=['Goals','xG','Assists','xA','ChI','Pass Sec','ThrV','Tackles','Duel Drive','Cross Acc'];
+  const pcts=[62,60,48,55,78,50,74,55,48,92];
+  const cats=[ATKHI,ATKHI,ATKHI,ATKHI,PASS,DEF,ATKHI,ATKLO,BARCA,PASS];
+  const n=metrics.length;
+  ctx.strokeStyle=wa(GDIM,.4);ctx.lineWidth=1.5;ctx.setLineDash([2,3]);
+  ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+  [.5,.75].forEach(r=>{ctx.strokeStyle=wa(GDIM,.2);ctx.lineWidth=.5;ctx.beginPath();ctx.arc(cx,cy,R*r,0,Math.PI*2);ctx.stroke();});
+  pcts.forEach((pct,i)=>{
+    const sA=-Math.PI/2+(i/n)*2*Math.PI,eA=-Math.PI/2+((i+1)/n)*2*Math.PI-0.04;
+    const r=R*(pct/100)*p,col=cats[i];
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,sA,eA);ctx.closePath();
+    ctx.fillStyle=wa(col,pct>=70?.75:.45);ctx.fill();
+    ctx.strokeStyle=wa(col,.9);ctx.lineWidth=1.5;ctx.stroke();
+    const midA=(sA+eA)/2,lx=cx+Math.cos(midA)*(R+16),ly=cy+Math.sin(midA)*(R+16);
+    ctx.font='bold 9px monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=col;ctx.fillText(metrics[i],lx,ly);
+    if(p>0.8&&r>22){const vx=cx+Math.cos(midA)*r*0.65,vy=cy+Math.sin(midA)*r*0.65;ctx.font='8px monospace';ctx.fillStyle=wa(PLAYER,.9);ctx.fillText(pct+'%',vx,vy);}
+  });
+  ctx.beginPath();ctx.arc(cx,cy,24,0,Math.PI*2);ctx.fillStyle=BG2;ctx.fill();
+  ctx.strokeStyle=wa(PLAYER,.5);ctx.lineWidth=1;ctx.stroke();
+  ctx.font='bold 9px monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=PLAYER;ctx.fillText('SAKA',cx,cy-5);
+  ctx.fillStyle=GRAY;ctx.font='8px monospace';ctx.fillText('25/26',cx,cy+6);
+}
+
+function drawPolar(canvas,p=1){
+  const{ctx,w,h}=sc(canvas);
+  ctx.fillStyle=BG2;ctx.fillRect(0,0,w,h);
+  const cx=w/2,cy=h/2+10,R=Math.min(w,h)*0.32;
+  const fams=[{name:'Output',score:.74,color:ATKHI},{name:'Creativity',color:PASS,score:.68},{name:'Control',color:DEF,score:.72},{name:'Defense',color:ATKLO,score:.62}];
+  const n=fams.length;
+  ctx.strokeStyle=wa(GDIM,.3);ctx.lineWidth=1;ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.stroke();
+  fams.forEach((f,i)=>{
+    const sA=-Math.PI/2+(i/n)*2*Math.PI,eA=-Math.PI/2+((i+1)/n)*2*Math.PI-0.06,r=R*f.score*p;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,sA,eA);ctx.closePath();
+    ctx.fillStyle=wa(f.color,.7);ctx.fill();ctx.strokeStyle=f.color;ctx.lineWidth=1.5;ctx.stroke();
+    const midA=(sA+eA)/2,lx=cx+Math.cos(midA)*(R+22),ly=cy+Math.sin(midA)*(R+22);
+    ctx.font='bold 11px monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=f.color;ctx.fillText(f.name,lx,ly);
+    if(r>30&&p>0.6){const sx=cx+Math.cos(midA)*r*.6,sy=cy+Math.sin(midA)*r*.6;ctx.font='bold 10px monospace';ctx.fillStyle=PLAYER;ctx.fillText(Math.round(f.score*100),sx,sy);}
+  });
+  ctx.beginPath();ctx.arc(cx,cy,28,0,Math.PI*2);ctx.fillStyle=BG2;ctx.fill();
+  ctx.strokeStyle=wa(PLAYER,.4);ctx.lineWidth=1;ctx.stroke();
+  ctx.font='bold 8px monospace';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=PLAYER;ctx.fillText('PRECISION',cx,cy-5);ctx.fillText('FINISHER',cx,cy+6);
+}
+
+function drawScatter(canvas,p=1){
+  const{ctx,w,h}=sc(canvas);
+  ctx.fillStyle=BG2;ctx.fillRect(0,0,w,h);
+  const pL=52,pR=24,pT=24,pB=48,cw=w-pL-pR,ch=h-pT-pB;
+  const xMin=0.1,xMax=0.45,yMin=0.15,yMax=0.70;
+  const toX=v=>(v-xMin)/(xMax-xMin)*cw+pL,toY=v=>(1-(v-yMin)/(yMax-yMin))*ch+pT;
+  [.15,.25,.35,.45,.55,.65].forEach(v=>{ctx.strokeStyle=wa(GDIM,.4);ctx.lineWidth=.5;ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(toX(xMin),toY(v));ctx.lineTo(toX(xMax),toY(v));ctx.stroke();ctx.fillStyle=GRAY;ctx.font='9px monospace';ctx.textAlign='right';ctx.fillText(v.toFixed(2),pL-4,toY(v)+4);ctx.setLineDash([]);});
+  [.15,.20,.25,.30,.35,.40].forEach(v=>{ctx.strokeStyle=wa(GDIM,.4);ctx.lineWidth=.5;ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(toX(v),pT);ctx.lineTo(toX(v),h-pB);ctx.stroke();ctx.fillStyle=GRAY;ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText(v.toFixed(2),toX(v),h-pB+14);ctx.setLineDash([]);});
+  ctx.font='10px monospace';ctx.fillStyle=GRAY;ctx.textAlign='center';ctx.fillText('xA per 90 →',pL+cw/2,h-4);
+  ctx.save();ctx.translate(14,pT+ch/2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';ctx.fillText('Goals per 90 →',0,0);ctx.restore();
+  const vis=Math.floor(PEERS.length*p);
+  PEERS.slice(0,vis).forEach(pt=>{
+    const x=toX(pt.xa),y=toY(pt.gls),r=(pt.gis/15)*14;
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
+    if(pt.hero){
+      ctx.fillStyle=wa(PLAYER,.85);ctx.fill();ctx.strokeStyle=GOLD;ctx.lineWidth=2;ctx.stroke();
+      ctx.font='bold 11px monospace';ctx.textAlign='left';ctx.fillStyle=GOLD;ctx.fillText(pt.n,x+r+4,y-2);
+      ctx.font='9px monospace';ctx.fillStyle=GRAY;ctx.fillText('Age 24',x+r+4,y+10);
+    } else {
+      ctx.fillStyle=wa(GRAY,.25);ctx.fill();ctx.strokeStyle=wa(GRAY,.4);ctx.lineWidth=1;ctx.stroke();
+      if(['Salah','Yamal','Mbappé'].includes(pt.n)){ctx.font='9px monospace';ctx.fillStyle=wa(GRAY,.7);ctx.textAlign='left';ctx.fillText(pt.n,x+r+3,y+4);}
+    }
+  });
+}
+
+const sakaRadar=[0.62,0.60,0.78,0.45,0.48,0.55,0.74,0.55,0.92,0.55];
+const yamalRadar=[0.88,0.82,0.85,0.74,0.90,0.55,0.92,0.22,0.74,0.78];
+
+const chartTargets=[
+  {id:'careerArcCanvas',fn:p=>drawArc(document.getElementById('careerArcCanvas'),p)},
+  {id:'radarCanvas',fn:p=>drawRadar(document.getElementById('radarCanvas'),sakaRadar,null,p)},
+  {id:'dualRadarCanvas',fn:p=>drawRadar(document.getElementById('dualRadarCanvas'),sakaRadar,yamalRadar,p)},
+  {id:'pizzaCanvas',fn:p=>drawPizza(document.getElementById('pizzaCanvas'),p)},
+  {id:'polarCanvas',fn:p=>drawPolar(document.getElementById('polarCanvas'),p)},
+  {id:'scatterCanvas',fn:p=>drawScatter(document.getElementById('scatterCanvas'),p)},
+];
+
+const textObs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('vis');});},{threshold:.15,rootMargin:'0px 0px -60px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>textObs.observe(el));
+const chartObs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting){const id=el.target.id,t=chartTargets.find(x=>x.id===id);if(t)animate(id,t.fn,1400);chartObs.unobserve(el.target);}});},{threshold:.3});
+chartTargets.forEach(t=>{const el=document.getElementById(t.id);if(el)chartObs.observe(el);});
+const prog=document.getElementById('progress');
+document.addEventListener('scroll',()=>{prog.style.width=(window.scrollY/(document.documentElement.scrollHeight-window.innerHeight)*100)+'%';});
+window.addEventListener('load',()=>drawArc(document.getElementById('careerArcCanvas'),1));
+</script>
+</body>
+</html>

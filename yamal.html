@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lamine Yamal — BarcaFutbol Data Story</title>
+<meta name="description" content="The most complete data profile of Lamine Yamal. Career arc, peer scatter, radar, pizza chart and the hidden metric xG cannot explain.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d1117;--bg2:#0d1b2a;--bg3:#161b22;
+  --barca:#A50044;--gold:#EDBB00;--white:#f0f6fc;
+  --gray:#8b949e;--gray-dim:#3d444d;
+  --pass:#4CAF50;--def:#2196F3;--atkhi:#ffd60a;--atklo:#e63946;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:'DM Mono',monospace;overflow-x:hidden;line-height:1.6}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 48px;height:60px;display:flex;align-items:center;justify-content:space-between;background:rgba(13,17,23,0.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(165,0,68,0.15)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--white);text-decoration:none}
+.nav-logo span{color:var(--barca)}
+.nav-player{font-size:11px;letter-spacing:2px;color:var(--gray);text-transform:uppercase}
+.nav-back{font-size:11px;letter-spacing:1px;color:var(--gray);text-decoration:none;transition:color .2s;display:flex;align-items:center;gap:6px}
+.nav-back:hover{color:var(--white)}
+
+/* PROGRESS BAR */
+.progress{position:fixed;top:60px;left:0;height:2px;background:var(--barca);width:0%;z-index:99;transition:width .1s linear}
+
+/* ── ACT 1: HERO ── */
+.act-hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 40px;position:relative;overflow:hidden}
+.hero-bg-num{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:40vw;color:rgba(165,0,68,0.03);line-height:1;pointer-events:none;user-select:none;top:50%;left:50%;transform:translate(-50%,-50%)}
+.hero-eyebrow{font-size:11px;letter-spacing:4px;color:var(--barca);text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp .9s .3s forwards}
+.hero-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(72px,14vw,160px);letter-spacing:2px;line-height:0.9;color:var(--white);opacity:0;animation:fadeUp .9s .5s forwards}
+.hero-name-last{color:var(--barca)}
+.hero-pos{font-size:12px;letter-spacing:4px;color:var(--gray);text-transform:uppercase;margin:20px 0 48px;opacity:0;animation:fadeUp .9s .7s forwards}
+.hero-number-block{opacity:0;animation:fadeUp .9s .9s forwards}
+.hero-big-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,20vw,200px);color:var(--barca);line-height:1}
+.hero-num-label{font-size:12px;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-top:8px}
+.hero-scroll{position:absolute;bottom:48px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeUp .8s 1.4s forwards}
+.hero-scroll span{font-size:10px;letter-spacing:3px;color:var(--gray-dim);text-transform:uppercase}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--barca),transparent);animation:pulse 2s infinite}
+
+/* ── ACTS COMMON ── */
+.act{min-height:80vh;display:flex;flex-direction:column;justify-content:center;padding:100px 0;position:relative}
+.act-inner{max-width:1100px;margin:0 auto;padding:0 48px;width:100%}
+.act-label{font-size:10px;letter-spacing:4px;color:var(--barca);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:12px;opacity:0;transform:translateY(20px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.act-label::before{content:'';width:32px;height:1px;background:var(--barca)}
+.act-label.vis{opacity:1;transform:translateY(0)}
+.act-headline{font-family:'Playfair Display',serif;font-size:clamp(28px,4.5vw,52px);color:var(--white);line-height:1.15;margin-bottom:20px;opacity:0;transform:translateY(24px);transition:all .8s .1s cubic-bezier(.16,1,.3,1)}
+.act-headline.vis{opacity:1;transform:translateY(0)}
+.act-body{font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,20px);color:var(--gray);line-height:1.7;max-width:680px;font-style:italic;opacity:0;transform:translateY(24px);transition:all .8s .2s cubic-bezier(.16,1,.3,1)}
+.act-body.vis{opacity:1;transform:translateY(0)}
+.act-footnote{font-size:10px;letter-spacing:1.5px;color:var(--gray-dim);margin-top:16px;opacity:0;transition:opacity .8s .4s}
+.act-footnote.vis{opacity:1}
+
+/* LAYOUT: text left, chart right */
+.act-split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.act-split-reverse{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.act-split-reverse .act-text{order:2}
+.act-split-reverse .act-chart-wrap{order:1}
+.act-text{}
+.act-chart-wrap{opacity:0;transform:translateX(30px);transition:all .9s .3s cubic-bezier(.16,1,.3,1)}
+.act-chart-wrap.vis{opacity:1;transform:translateX(0)}
+.act-split-reverse .act-chart-wrap{transform:translateX(-30px)}
+.act-split-reverse .act-chart-wrap.vis{transform:translateX(0)}
+
+/* CHART CONTAINERS */
+.chart-box{background:var(--bg2);border:1px solid var(--gray-dim);border-radius:8px;overflow:hidden;padding:24px}
+.chart-box canvas{display:block;width:100%;height:auto}
+
+/* ── ACT: SIGNATURE NUMBER ── */
+.act-signature{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 40px;position:relative;overflow:hidden;background:var(--bg2)}
+.sig-bg{position:absolute;inset:0;background:radial-gradient(ellipse 50% 60% at 50% 50%,rgba(165,0,68,0.06) 0%,transparent 70%);pointer-events:none}
+.sig-label{font-size:11px;letter-spacing:4px;color:var(--barca);text-transform:uppercase;margin-bottom:32px;opacity:0;transition:all .8s .1s}
+.sig-label.vis{opacity:1}
+.sig-number{font-family:'Bebas Neue',sans-serif;font-size:clamp(140px,22vw,280px);color:var(--barca);line-height:1;opacity:0;transform:scale(0.85);transition:all 1s .2s cubic-bezier(.16,1,.3,1)}
+.sig-number.vis{opacity:1;transform:scale(1)}
+.sig-unit{font-size:14px;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-bottom:32px;opacity:0;transition:all .8s .4s}
+.sig-unit.vis{opacity:1}
+.sig-headline{font-family:'Playfair Display',serif;font-size:clamp(18px,2.5vw,28px);color:var(--white);max-width:700px;line-height:1.4;margin-bottom:16px;opacity:0;transition:all .8s .5s;font-style:italic}
+.sig-headline.vis{opacity:1}
+.sig-sub{font-size:11px;letter-spacing:1.5px;color:var(--gray-dim);opacity:0;transition:all .8s .7s}
+.sig-sub.vis{opacity:1}
+
+/* ── ACT: COMPARISON ── */
+.comp-names{display:flex;align-items:center;gap:24px;margin-bottom:32px;flex-wrap:wrap}
+.comp-name{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px}
+.comp-vs{font-size:14px;letter-spacing:3px;color:var(--gray);text-transform:uppercase}
+
+/* ── GATE ── */
+.act-gate{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 40px;position:relative;overflow:hidden;background:var(--bg2);border-top:1px solid var(--gray-dim)}
+.gate-blur{position:relative;margin:48px auto;max-width:700px;height:200px;background:var(--bg3);border:1px solid var(--gray-dim);border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.gate-blur-inner{filter:blur(8px);pointer-events:none;font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gray-dim);text-align:left;padding:20px;line-height:1.4}
+.gate-lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(13,17,23,0.4);backdrop-filter:blur(2px)}
+.gate-lock-icon{font-size:32px;color:var(--barca)}
+.gate-lock-text{font-size:11px;letter-spacing:2px;color:var(--gray);text-transform:uppercase}
+.gate-headline{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,6vw,72px);letter-spacing:2px;color:var(--white);margin-bottom:16px;opacity:0;transform:translateY(20px);transition:all .8s .1s}
+.gate-headline.vis{opacity:1;transform:translateY(0)}
+.gate-body{font-family:'Playfair Display',serif;font-size:clamp(16px,1.8vw,20px);color:var(--gray);max-width:560px;line-height:1.7;font-style:italic;margin-bottom:40px;opacity:0;transition:all .8s .2s}
+.gate-body.vis{opacity:1}
+.gate-cta{display:inline-flex;align-items:center;gap:16px;background:var(--barca);color:var(--white);font-size:13px;letter-spacing:2px;text-transform:uppercase;padding:18px 40px;text-decoration:none;transition:all .3s;border:1px solid var(--barca);opacity:0;transition:all .8s .3s}
+.gate-cta.vis{opacity:1}
+.gate-cta:hover{background:transparent;color:var(--barca)}
+.gate-secondary{font-size:11px;color:var(--gray-dim);margin-top:20px;letter-spacing:1px;opacity:0;transition:all .8s .5s}
+.gate-secondary.vis{opacity:1}
+
+/* DIVIDER */
+.act-divider{height:1px;background:linear-gradient(to right,transparent,var(--gray-dim),transparent);margin:0 48px}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes drawLine{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:0 20px}
+  .act-inner{padding:0 24px}
+  .act-split,.act-split-reverse{grid-template-columns:1fr}
+  .act-split-reverse .act-text{order:1}
+  .act-split-reverse .act-chart-wrap{order:2}
+  .act-chart-wrap{transform:none!important}
+  .comp-names{flex-direction:column;gap:8px}
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo"><span>Barca</span>Futbol</a>
+  <span class="nav-player">Lamine Yamal · Data Story</span>
+  <a href="index.html" class="nav-back">← All Stories</a>
+</nav>
+
+<!-- ═══════════════ ACT 1: HERO ═══════════════ -->
+<section class="act-hero">
+  <div class="hero-bg-num">18</div>
+  <div class="hero-eyebrow">FC Barcelona · Right Wing · Age 18</div>
+  <h1 class="hero-name">Lamine<br><span class="hero-name-last">Yamal</span></h1>
+  <p class="hero-pos">The data story · 2022/23 – 2025/26</p>
+  <div class="hero-number-block">
+    <div class="hero-big-num">1.0</div>
+    <div class="hero-num-label">Goal Involvements per 90 · Season 25/26</div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll to read</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ ACT 2: CAREER ARC ═══════════════ -->
+<section class="act">
+  <div class="act-inner">
+    <div class="act-split">
+      <div class="act-text">
+        <div class="act-label reveal">Career Arc</div>
+        <h2 class="act-headline reveal">The line that shouldn't exist yet.</h2>
+        <p class="act-body reveal">Most wide forwards take three or four seasons to find their peak. Yamal found his at 17 and kept climbing. The arc you're looking at belongs to a player in his late twenties. He is 18.</p>
+        <p class="act-footnote reveal">Goal Involvement (GI) per 90 · All competitions · 2022/23–2025/26 · Source: Sofascore</p>
+      </div>
+      <div class="act-chart-wrap reveal">
+        <div class="chart-box">
+          <canvas id="careerArcCanvas" width="500" height="320"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act-divider"></div>
+
+<!-- ═══════════════ ACT 3: SIGNATURE NUMBER ═══════════════ -->
+<section class="act-signature">
+  <div class="sig-bg"></div>
+  <div class="sig-label reveal">The overperformance signature</div>
+  <div class="sig-number reveal" id="sigNum">+0.19</div>
+  <div class="sig-unit reveal">xG surplus · per 90 · every season</div>
+  <p class="sig-headline reveal">"Every season, Yamal finishes above his expected goals. Not once. Not twice. Every season. That is not variance. That is a finishing signature xG cannot explain."</p>
+  <div class="sig-sub reveal">Goals per 90: 0.60 · xG per 90: 0.41 · Surplus: +0.19 · Season 25/26</div>
+</section>
+
+<!-- ═══════════════ ACT 4: RADAR PROFILE ═══════════════ -->
+<section class="act">
+  <div class="act-inner">
+    <div class="act-split-reverse">
+      <div class="act-text">
+        <div class="act-label reveal">Season Profile</div>
+        <h2 class="act-headline reveal">The shape of a player who shouldn't exist.</h2>
+        <p class="act-body reveal">This profile — elite Duel Drive, elite Threat Volume, elite Chance Ignition, all simultaneously — belongs to a player who has been doing this for a decade. The radar does not lie about age.</p>
+        <p class="act-footnote reveal">10 metrics · La Liga wide forward peer group · 2025/26 · BarcaFutbol design system</p>
+      </div>
+      <div class="act-chart-wrap reveal">
+        <div class="chart-box" style="display:flex;align-items:center;justify-content:center">
+          <canvas id="radarCanvas" width="420" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act-divider"></div>
+
+<!-- ═══════════════ ACT 5: COMPARISON RADAR ═══════════════ -->
+<section class="act">
+  <div class="act-inner">
+    <div class="act-split">
+      <div class="act-text">
+        <div class="act-label reveal">Comparison</div>
+        <div class="comp-names">
+          <span class="comp-name" style="color:var(--barca)">Yamal</span>
+          <span class="comp-vs">vs</span>
+          <span class="comp-name" style="color:var(--white)">Saka</span>
+        </div>
+        <p class="act-body reveal">Bukayo Saka is one of the best wide forwards in the world. His profile is balanced, precise, intelligent. Yamal's profile is extreme. Where Saka measures, Yamal overwhelms. The overlap is smaller than you'd expect.</p>
+        <p class="act-footnote reveal">Same 8 metrics · normalised to career peak · both players 2025/26 · Source: Sofascore</p>
+      </div>
+      <div class="act-chart-wrap reveal">
+        <div class="chart-box" style="display:flex;align-items:center;justify-content:center">
+          <canvas id="dualRadarCanvas" width="420" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act-divider"></div>
+
+<!-- ═══════════════ ACT 6: PIZZA ═══════════════ -->
+<section class="act">
+  <div class="act-inner">
+    <div class="act-split-reverse">
+      <div class="act-text">
+        <div class="act-label reveal">Percentile Profile</div>
+        <h2 class="act-headline reveal">Top of his position. In almost everything.</h2>
+        <p class="act-body reveal">Ten metrics. Eight wedges pushing toward the outer ring. The two that don't — Cross Accuracy at 21.3% and aerial duels — are the only reminders that there is still a ceiling somewhere above him.</p>
+        <p class="act-footnote reveal">Estimated percentile ranks vs La Liga wide forwards · 2025/26 · BarcaFutbol</p>
+      </div>
+      <div class="act-chart-wrap reveal">
+        <div class="chart-box" style="display:flex;align-items:center;justify-content:center">
+          <canvas id="pizzaCanvas" width="420" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act-divider"></div>
+
+<!-- ═══════════════ ACT 7: POLAR / TYPE OF PLAYER ═══════════════ -->
+<section class="act">
+  <div class="act-inner">
+    <div class="act-split">
+      <div class="act-text">
+        <div class="act-label reveal">Type of Player</div>
+        <h2 class="act-headline reveal">Dual-Threat Creator.</h2>
+        <p class="act-body reveal">Most elite wide forwards are one thing. A finisher or a creator. A carrier or a passer. Yamal is the rare player whose output index and creativity index both sit above 70. The archetype label barely contains him.</p>
+        <p class="act-footnote reveal">Four family indices · Control · Creativity · Output · Defense · BarcaFutbol composite</p>
+      </div>
+      <div class="act-chart-wrap reveal">
+        <div class="chart-box" style="display:flex;align-items:center;justify-content:center">
+          <canvas id="polarCanvas" width="420" height="420"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act-divider"></div>
+
+<!-- ═══════════════ ACT 8: PEER SCATTER ═══════════════ -->
+<section class="act">
+  <div class="act-inner">
+    <div class="act-split-reverse">
+      <div class="act-text">
+        <div class="act-label reveal">Peer Group Mapping</div>
+        <h2 class="act-headline reveal">Where he sits among the best in the world.</h2>
+        <p class="act-body reveal">xA on one axis. Goals on the other. Twenty of the best wide forwards in Europe shown in gray. The red dot is Yamal — at 18, in the top-right quadrant. The size of each dot is their Game Impact Score, the metric xG misses entirely.</p>
+        <p class="act-footnote reveal">20 top European wide forwards · min 25 apps · 2025/26 · dot size = GIS · BarcaFutbol</p>
+      </div>
+      <div class="act-chart-wrap reveal">
+        <div class="chart-box">
+          <canvas id="scatterCanvas" width="460" height="360"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="act-divider"></div>
+
+<!-- ═══════════════ ACT 9: HIDDEN METRIC ═══════════════ -->
+<section class="act-signature" style="background:var(--bg)">
+  <div class="sig-bg"></div>
+  <div class="sig-label reveal">The hidden metric</div>
+  <div style="display:flex;align-items:center;gap:32px;justify-content:center;flex-wrap:wrap;margin:32px 0 20px">
+    <div style="text-align:center">
+      <div style="font-size:11px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:8px">xGI says</div>
+      <div class="sig-number reveal" style="font-size:clamp(80px,12vw,140px)">0.73</div>
+    </div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,6vw,80px);color:var(--gray-dim)">≠</div>
+    <div style="text-align:center">
+      <div style="font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:8px">GIS says</div>
+      <div class="sig-number reveal" style="font-size:clamp(80px,12vw,140px);color:var(--gold)">Elite</div>
+    </div>
+  </div>
+  <p class="sig-headline reveal">"Expected goals ranks Yamal as a good player. The Game Impact Score — BarcaFutbol's composite of chance creation, ball progression, defensive contribution and costly errors — ranks him as a generational one."</p>
+  <div class="sig-sub reveal">GIS = (ChI×2)+(SprR×3)+(TchD×0.1)+(Tkl×1.5)+(Int×1.5)−(CstErr×3) · BarcaFutbol original metric</div>
+</section>
+
+<!-- ═══════════════ ACT 10: GATE ═══════════════ -->
+<section class="act-gate">
+  <h2 class="gate-headline reveal">This is where<br>the free story ends.</h2>
+  <p class="gate-body reveal">The full BarcaFutbol report on Lamine Yamal includes all 42 charts, every competition split, UCL vs LaLiga vs Copa analysis, transfer timeline, the complete career delta heatmap, and the most detailed analytical write-up of this player available anywhere outside a professional scouting department.</p>
+  <div class="gate-blur">
+    <div class="gate-blur-inner">
+      UCL vs LaLiga split · Big Game Index · Career delta heatmap<br>
+      Age-adjusted prodigy curve · Consistency score 0.81<br>
+      Role evolution timeline · Full 42-chart PDF report<br>
+      Competition split radar · Peer group ranking
+    </div>
+    <div class="gate-lock">
+      <div class="gate-lock-icon">⬡</div>
+      <div class="gate-lock-text">BarcaFutbol Premium</div>
+    </div>
+  </div>
+  <a href="#" class="gate-cta reveal">Join BarcaFutbol Premium →</a>
+  <p class="gate-secondary reveal">Full 42-chart PDF report · Competition split analysis · Monthly player stories</p>
+</section>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const YAMAL = {
+  seasons: ['22/23','23/24','24/25','25/26'],
+  ages:    [15, 16, 17, 18],
+  gi:      [0.0, 0.4, 0.8, 1.0],
+  xg:      [0.28, 0.21, 0.28, 0.41],
+  gls:     [0.0, 0.2, 0.4, 0.6],
+  xa:      [0.27, 0.26, 0.28, 0.33],
+  ast:     [0.0, 0.2, 0.4, 0.4],
+  keyp:    [2.4, 1.5, 1.8, 2.8],
+  bcc:     [0.8, 0.5, 0.8, 1.0],
+  drp:     [3.2, 1.3, 4.8, 5.3],
+  tack:    [0.8, 2.4, 1.2, 1.4],
+  int:     [0.0, 0.9, 0.6, 0.4],
+  aps:     [42.6, 34.0, 33.8, 44.5],
+  apsp:    [80.3, 83.3, 78.9, 81.3],
+};
+
+const SAKA = {
+  gls:0.3, xa:0.25, keyp:2.5, bcc:0.4, drp:1.9, tack:1.4, int:0.7, aps:24.2, apsp:78.6
+};
+
+const PEERS = [
+  {n:'Salah',  xa:0.38, gls:0.62, gis:14.2},
+  {n:'Vini Jr',xa:0.22, gls:0.55, gis:12.1},
+  {n:'Mbappé', xa:0.19, gls:0.61, gis:11.8},
+  {n:'Raphinha',xa:0.26,gls:0.45, gis:10.9},
+  {n:'Son',    xa:0.24, gls:0.38, gis:9.8},
+  {n:'Pulisic',xa:0.21, gls:0.41, gis:9.2},
+  {n:'Diaz',   xa:0.16, gls:0.33, gis:8.4},
+  {n:'Doku',   xa:0.18, gls:0.25, gis:8.1},
+  {n:'Gnonto', xa:0.14, gls:0.20, gis:7.2},
+  {n:'Zirkzee',xa:0.15, gls:0.27, gis:7.8},
+  {n:'Leao',   xa:0.20, gls:0.35, gis:9.0},
+  {n:'Foden',  xa:0.22, gls:0.30, gis:9.5},
+  {n:'Saka',   xa:0.25, gls:0.30, gis:10.1},
+  {n:'Olise',  xa:0.28, gls:0.40, gis:10.5},
+  {n:'Pedro',  xa:0.15, gls:0.42, gis:9.3},
+  {n:'Yamal',  xa:0.33, gls:0.60, gis:15.8, hero:true},
+];
+
+// ── PALETTE ───────────────────────────────────────────────────────────────
+const BG='#0d1117', BG2='#0d1b2a', BG3='#161b22';
+const BARCA='#A50044', GOLD='#EDBB00', WHITE='#f0f6fc', GRAY='#8b949e', GDIM='#3d444d';
+const PASS='#4CAF50', DEF='#2196F3', ATKHI='#ffd60a', ATKLO='#e63946';
+
+function hexToRgb(h){return[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]}
+function withAlpha(hex,a){const[r,g,b]=hexToRgb(hex);return `rgba(${r},${g},${b},${a})`}
+
+// ── CHART UTILITIES ────────────────────────────────────────────────────────
+function setCanvas(canvas){
+  const dpr=window.devicePixelRatio||1;
+  const w=canvas.offsetWidth||canvas.width;
+  const h=canvas.offsetHeight||canvas.height;
+  canvas.width=w*dpr; canvas.height=h*dpr;
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  canvas.style.width=w+'px'; canvas.style.height=h+'px';
+  return{ctx,w,h};
+}
+
+// ── DRAW: CAREER ARC ──────────────────────────────────────────────────────
+function drawCareerArc(canvas, progress=1){
+  const{ctx,w,h}=setCanvas(canvas);
+  ctx.fillStyle=BG2; ctx.fillRect(0,0,w,h);
+
+  const padL=48,padR=24,padT=24,padB=48;
+  const cw=w-padL-padR, ch=h-padT-padB;
+  const n=YAMAL.seasons.length;
+  const maxGI=1.2;
+
+  // Grid lines
+  [0,0.3,0.6,0.9,1.2].forEach(v=>{
+    const y=padT+ch*(1-v/maxGI);
+    ctx.strokeStyle=withAlpha(GDIM,0.5); ctx.lineWidth=1; ctx.setLineDash([3,4]);
+    ctx.beginPath(); ctx.moveTo(padL,y); ctx.lineTo(w-padR,y); ctx.stroke();
+    ctx.fillStyle=GRAY; ctx.font='10px monospace'; ctx.textAlign='right';
+    ctx.fillText(v.toFixed(1),padL-6,y+4);
+    ctx.setLineDash([]);
+  });
+
+  // Season labels
+  ctx.textAlign='center'; ctx.fillStyle=GRAY; ctx.font='11px monospace';
+  YAMAL.seasons.forEach((s,i)=>{
+    const x=padL+i*(cw/(n-1));
+    ctx.fillText(s,x,h-padB+18);
+    ctx.strokeStyle=withAlpha(GDIM,0.3); ctx.lineWidth=1; ctx.setLineDash([2,3]);
+    ctx.beginPath(); ctx.moveTo(x,padT); ctx.lineTo(x,h-padB); ctx.stroke();
+    ctx.setLineDash([]);
+  });
+
+  // Age labels
+  ctx.fillStyle=withAlpha(GRAY,0.5); ctx.font='9px monospace';
+  YAMAL.ages.forEach((a,i)=>{
+    const x=padL+i*(cw/(n-1));
+    ctx.fillText('Age '+a,x,h-padB+30);
+  });
+
+  // xG line (dashed, muted)
+  const drawLen=Math.floor((n-1)*progress);
+  const frac=(n-1)*progress-drawLen;
+
+  ctx.strokeStyle=withAlpha(GOLD,0.35); ctx.lineWidth=1.5; ctx.setLineDash([4,4]);
+  ctx.beginPath();
+  for(let i=0;i<=drawLen && i<n;i++){
+    const x=padL+i*(cw/(n-1));
+    const y=padT+ch*(1-YAMAL.xg[i]/maxGI);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  if(frac>0 && drawLen<n-1){
+    const x=padL+(drawLen+frac)*(cw/(n-1));
+    const y=padT+ch*(1-(YAMAL.xg[drawLen]+frac*(YAMAL.xg[drawLen+1]-YAMAL.xg[drawLen]))/maxGI);
+    ctx.lineTo(x,y);
+  }
+  ctx.stroke(); ctx.setLineDash([]);
+
+  // GI fill
+  ctx.beginPath();
+  ctx.moveTo(padL,padT+ch);
+  for(let i=0;i<=drawLen && i<n;i++){
+    const x=padL+i*(cw/(n-1));
+    const y=padT+ch*(1-YAMAL.gi[i]/maxGI);
+    ctx.lineTo(x,y);
+  }
+  if(frac>0 && drawLen<n-1){
+    const x=padL+(drawLen+frac)*(cw/(n-1));
+    const yv=YAMAL.gi[drawLen]+frac*(YAMAL.gi[drawLen+1]-YAMAL.gi[drawLen]);
+    const y=padT+ch*(1-yv/maxGI);
+    ctx.lineTo(x,y);
+  }
+  const lastX=frac>0?padL+(drawLen+frac)*(cw/(n-1)):padL+Math.min(drawLen,n-1)*(cw/(n-1));
+  ctx.lineTo(lastX,padT+ch); ctx.closePath();
+  ctx.fillStyle=withAlpha(BARCA,0.12); ctx.fill();
+
+  // GI line
+  ctx.strokeStyle=BARCA; ctx.lineWidth=3; ctx.lineCap='round'; ctx.lineJoin='round';
+  ctx.beginPath();
+  for(let i=0;i<=drawLen && i<n;i++){
+    const x=padL+i*(cw/(n-1));
+    const y=padT+ch*(1-YAMAL.gi[i]/maxGI);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  if(frac>0 && drawLen<n-1){
+    const x=padL+(drawLen+frac)*(cw/(n-1));
+    const yv=YAMAL.gi[drawLen]+frac*(YAMAL.gi[drawLen+1]-YAMAL.gi[drawLen]);
+    const y=padT+ch*(1-yv/maxGI);
+    ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  // Dots + labels
+  for(let i=0;i<=drawLen && i<n;i++){
+    const x=padL+i*(cw/(n-1));
+    const y=padT+ch*(1-YAMAL.gi[i]/maxGI);
+    ctx.beginPath(); ctx.arc(x,y,i===n-1?7:5,0,Math.PI*2);
+    ctx.fillStyle=i===n-1?GOLD:BARCA; ctx.fill();
+    if(i===n-1||i===0){
+      ctx.fillStyle=i===n-1?GOLD:WHITE; ctx.font='bold 11px monospace'; ctx.textAlign='center';
+      ctx.fillText(YAMAL.gi[i].toFixed(1),x,y-14);
+    }
+  }
+
+  // Legend
+  ctx.font='10px monospace'; ctx.textAlign='left';
+  ctx.fillStyle=BARCA; ctx.fillRect(padL,12,20,3);
+  ctx.fillStyle=WHITE; ctx.fillText('Goal Involvement (GI)',padL+26,16);
+  ctx.strokeStyle=withAlpha(GOLD,0.5); ctx.lineWidth=1.5; ctx.setLineDash([4,4]);
+  ctx.beginPath(); ctx.moveTo(padL+180,14); ctx.lineTo(padL+200,14); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle=GOLD; ctx.fillText('xG',padL+206,16);
+}
+
+// ── DRAW: RADAR ────────────────────────────────────────────────────────────
+function drawRadar(canvas, yamalVals, sakaVals=null, progress=1){
+  const{ctx,w,h}=setCanvas(canvas);
+  ctx.fillStyle=BG2; ctx.fillRect(0,0,w,h);
+
+  const cx=w/2, cy=h/2+10, R=Math.min(w,h)*0.35;
+  const metrics=['Goals','xG','ChI','SprR','Duel Drive','Tackles','Int','Pass Sec','Threat Vol','xA'];
+  const mColors=[ATKHI,ATKHI,PASS,PASS,BARCA,ATKLO,ATKLO,DEF,ATKHI,PASS];
+  const n=metrics.length;
+  const angles=metrics.map((_,i)=>-Math.PI/2+i*2*Math.PI/n);
+
+  // Grid rings
+  [0.25,0.5,0.75,1.0].forEach(r=>{
+    ctx.strokeStyle=withAlpha(GDIM,r===1.0?0.6:0.3);
+    ctx.lineWidth=r===1.0?1.5:0.5; ctx.setLineDash(r===1.0?[]:[2,3]);
+    ctx.beginPath();
+    angles.forEach((a,i)=>{const px=cx+Math.cos(a)*R*r,py=cy+Math.sin(a)*R*r;i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);});
+    ctx.closePath(); ctx.stroke(); ctx.setLineDash([]);
+  });
+
+  // Spokes
+  angles.forEach(a=>{
+    ctx.strokeStyle=withAlpha(GDIM,0.4); ctx.lineWidth=0.5;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R); ctx.stroke();
+  });
+
+  // Saka polygon (if dual radar)
+  if(sakaVals){
+    ctx.beginPath();
+    sakaVals.forEach((v,i)=>{
+      const r=v*progress, px=cx+Math.cos(angles[i])*R*r, py=cy+Math.sin(angles[i])*R*r;
+      i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+    });
+    ctx.closePath();
+    ctx.fillStyle=withAlpha(WHITE,0.08); ctx.fill();
+    ctx.strokeStyle=withAlpha(WHITE,0.5); ctx.lineWidth=2; ctx.stroke();
+  }
+
+  // Yamal polygon
+  ctx.beginPath();
+  yamalVals.forEach((v,i)=>{
+    const r=v*progress, px=cx+Math.cos(angles[i])*R*r, py=cy+Math.sin(angles[i])*R*r;
+    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+  });
+  ctx.closePath();
+  ctx.fillStyle=withAlpha(BARCA,0.25); ctx.fill();
+  ctx.strokeStyle=BARCA; ctx.lineWidth=2.5; ctx.stroke();
+
+  // Dots
+  yamalVals.forEach((v,i)=>{
+    const r=v*progress, px=cx+Math.cos(angles[i])*R*r, py=cy+Math.sin(angles[i])*R*r;
+    ctx.beginPath(); ctx.arc(px,py,4,0,Math.PI*2);
+    ctx.fillStyle=BARCA; ctx.fill();
+  });
+
+  // Labels
+  metrics.forEach((m,i)=>{
+    const lx=cx+Math.cos(angles[i])*(R+22), ly=cy+Math.sin(angles[i])*(R+22);
+    ctx.font='bold 10px monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle=mColors[i]; ctx.fillText(m,lx,ly);
+  });
+
+  // Legend (dual)
+  if(sakaVals){
+    ctx.font='10px monospace'; ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+    ctx.fillStyle=BARCA; ctx.fillRect(16,16,16,3); ctx.fillStyle=WHITE; ctx.fillText('Yamal',36,22);
+    ctx.strokeStyle=withAlpha(WHITE,0.5); ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(110,19); ctx.lineTo(126,19); ctx.stroke();
+    ctx.fillStyle=WHITE; ctx.fillText('Saka',130,22);
+  }
+}
+
+// ── DRAW: PIZZA ────────────────────────────────────────────────────────────
+function drawPizza(canvas, progress=1){
+  const{ctx,w,h}=setCanvas(canvas);
+  ctx.fillStyle=BG2; ctx.fillRect(0,0,w,h);
+
+  const cx=w/2, cy=h/2+8, R=Math.min(w,h)*0.36;
+  const metrics=['Goals','xG','Assists','xA','ChI','Pass Sec','ThrV','Tackles','Duel Drive','Cross Acc'];
+  const pcts=[88,82,78,74,85,58,92,55,90,22]; // estimated percentiles
+  const cats=[ATKHI,ATKHI,ATKHI,ATKHI,PASS,DEF,ATKHI,ATKLO,BARCA,ATKLO];
+  const n=metrics.length;
+
+  // Outer ring
+  ctx.strokeStyle=withAlpha(GDIM,0.4); ctx.lineWidth=1.5; ctx.setLineDash([2,3]);
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]);
+
+  // Inner rings
+  [0.5,0.75].forEach(r=>{
+    ctx.strokeStyle=withAlpha(GDIM,0.2); ctx.lineWidth=0.5;
+    ctx.beginPath(); ctx.arc(cx,cy,R*r,0,Math.PI*2); ctx.stroke();
+  });
+
+  // Wedges
+  pcts.forEach((pct,i)=>{
+    const sA=-Math.PI/2+(i/n)*2*Math.PI;
+    const eA=-Math.PI/2+((i+1)/n)*2*Math.PI-0.04;
+    const r=R*(pct/100)*progress;
+    const col=cats[i];
+
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,sA,eA); ctx.closePath();
+    const alpha=pct>=70?0.75:0.45;
+    ctx.fillStyle=withAlpha(col,alpha); ctx.fill();
+    ctx.strokeStyle=withAlpha(col,0.9); ctx.lineWidth=1.5; ctx.stroke();
+
+    // Label
+    const midA=(sA+eA)/2;
+    const lx=cx+Math.cos(midA)*(R+16), ly=cy+Math.sin(midA)*(R+16);
+    ctx.font='bold 9px monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle=col; ctx.fillText(metrics[i],lx,ly);
+
+    // Percentile value
+    if(progress>0.8){
+      const vx=cx+Math.cos(midA)*r*0.65, vy=cy+Math.sin(midA)*r*0.65;
+      if(r>22){
+        ctx.font='8px monospace'; ctx.fillStyle=withAlpha(WHITE,0.9);
+        ctx.fillText(pct+'%',vx,vy);
+      }
+    }
+  });
+
+  // Centre
+  ctx.beginPath(); ctx.arc(cx,cy,24,0,Math.PI*2);
+  ctx.fillStyle=BG2; ctx.fill();
+  ctx.strokeStyle=withAlpha(BARCA,0.5); ctx.lineWidth=1; ctx.stroke();
+  ctx.font='bold 9px monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle=WHITE; ctx.fillText('YAMAL',cx,cy-5);
+  ctx.fillStyle=GRAY; ctx.font='8px monospace'; ctx.fillText('25/26',cx,cy+6);
+}
+
+// ── DRAW: POLAR ────────────────────────────────────────────────────────────
+function drawPolar(canvas, progress=1){
+  const{ctx,w,h}=setCanvas(canvas);
+  ctx.fillStyle=BG2; ctx.fillRect(0,0,w,h);
+
+  const cx=w/2, cy=h/2+10, R=Math.min(w,h)*0.33;
+  const families=[
+    {name:'Output',   score:0.88, color:ATKHI},
+    {name:'Creativity',score:0.82, color:PASS},
+    {name:'Control',  score:0.48, color:DEF},
+    {name:'Defense',  score:0.44, color:ATKLO},
+  ];
+  const n=families.length;
+
+  // Outer guide ring
+  ctx.strokeStyle=withAlpha(GDIM,0.3); ctx.lineWidth=1;
+  ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.stroke();
+
+  // Bars
+  families.forEach((f,i)=>{
+    const sA=-Math.PI/2+(i/n)*2*Math.PI;
+    const eA=-Math.PI/2+((i+1)/n)*2*Math.PI-0.06;
+    const r=R*f.score*progress;
+
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,sA,eA); ctx.closePath();
+    ctx.fillStyle=withAlpha(f.color,0.7); ctx.fill();
+    ctx.strokeStyle=f.color; ctx.lineWidth=1.5; ctx.stroke();
+
+    // Label
+    const midA=(sA+eA)/2;
+    const lx=cx+Math.cos(midA)*(R+22), ly=cy+Math.sin(midA)*(R+22);
+    ctx.font='bold 11px monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle=f.color; ctx.fillText(f.name,lx,ly);
+
+    // Score
+    const sx=cx+Math.cos(midA)*r*0.6, sy=cy+Math.sin(midA)*r*0.6;
+    if(r>30 && progress>0.6){
+      ctx.font='bold 10px monospace'; ctx.fillStyle=WHITE;
+      ctx.fillText(Math.round(f.score*100),sx,sy);
+    }
+  });
+
+  // Centre label
+  ctx.beginPath(); ctx.arc(cx,cy,28,0,Math.PI*2);
+  ctx.fillStyle=BG2; ctx.fill();
+  ctx.strokeStyle=withAlpha(BARCA,0.4); ctx.lineWidth=1; ctx.stroke();
+  ctx.font='bold 8px monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillStyle=BARCA; ctx.fillText('DUAL-THREAT',cx,cy-5);
+  ctx.fillStyle=BARCA; ctx.fillText('CREATOR',cx,cy+6);
+}
+
+// ── DRAW: SCATTER ──────────────────────────────────────────────────────────
+function drawScatter(canvas, progress=1){
+  const{ctx,w,h}=setCanvas(canvas);
+  ctx.fillStyle=BG2; ctx.fillRect(0,0,w,h);
+
+  const padL=52,padR=24,padT=24,padB=48;
+  const cw=w-padL-padR, ch=h-padT-padB;
+
+  const xMin=0.1,xMax=0.45,yMin=0.15,yMax=0.70;
+  const toX=v=>(v-xMin)/(xMax-xMin)*cw+padL;
+  const toY=v=>(1-(v-yMin)/(yMax-yMin))*ch+padT;
+
+  // Grid
+  [0.15,0.25,0.35,0.45,0.55,0.65].forEach(v=>{
+    ctx.strokeStyle=withAlpha(GDIM,0.4); ctx.lineWidth=0.5; ctx.setLineDash([2,3]);
+    ctx.beginPath(); ctx.moveTo(toX(xMin),toY(v)); ctx.lineTo(toX(xMax),toY(v)); ctx.stroke();
+    ctx.fillStyle=GRAY; ctx.font='9px monospace'; ctx.textAlign='right';
+    ctx.fillText(v.toFixed(2),padL-4,toY(v)+4);
+    ctx.setLineDash([]);
+  });
+  [0.15,0.20,0.25,0.30,0.35,0.40].forEach(v=>{
+    ctx.strokeStyle=withAlpha(GDIM,0.4); ctx.lineWidth=0.5; ctx.setLineDash([2,3]);
+    ctx.beginPath(); ctx.moveTo(toX(v),padT); ctx.lineTo(toX(v),h-padB); ctx.stroke();
+    ctx.fillStyle=GRAY; ctx.font='9px monospace'; ctx.textAlign='center';
+    ctx.fillText(v.toFixed(2),toX(v),h-padB+14);
+    ctx.setLineDash([]);
+  });
+
+  // Axis labels
+  ctx.font='10px monospace'; ctx.fillStyle=GRAY;
+  ctx.textAlign='center'; ctx.fillText('xA per 90 →',padL+cw/2,h-4);
+  ctx.save(); ctx.translate(14,padT+ch/2); ctx.rotate(-Math.PI/2);
+  ctx.textAlign='center'; ctx.fillText('Goals per 90 →',0,0); ctx.restore();
+
+  // Peers
+  const visCount=Math.floor(PEERS.length*progress);
+  PEERS.slice(0,visCount).forEach(p=>{
+    const x=toX(p.xa), y=toY(p.gls);
+    const r=(p.gis/15)*14;
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2);
+    if(p.hero){
+      ctx.fillStyle=withAlpha(BARCA,0.85); ctx.fill();
+      ctx.strokeStyle=GOLD; ctx.lineWidth=2; ctx.stroke();
+      ctx.font='bold 11px monospace'; ctx.textAlign='left';
+      ctx.fillStyle=GOLD; ctx.fillText(p.n,x+r+4,y-2);
+      ctx.font='9px monospace'; ctx.fillStyle=GRAY;
+      ctx.fillText('Age 18',x+r+4,y+10);
+    } else {
+      ctx.fillStyle=withAlpha(GRAY,0.25); ctx.fill();
+      ctx.strokeStyle=withAlpha(GRAY,0.4); ctx.lineWidth=1; ctx.stroke();
+      if(p.n==='Salah'||p.n==='Mbappé'||p.n==='Saka'){
+        ctx.font='9px monospace'; ctx.fillStyle=withAlpha(GRAY,0.7);
+        ctx.textAlign='left'; ctx.fillText(p.n,x+r+3,y+4);
+      }
+    }
+  });
+
+  // Legend
+  ctx.font='10px monospace'; ctx.textAlign='left'; ctx.textBaseline='middle';
+  ctx.beginPath(); ctx.arc(padL+8,14,5,0,Math.PI*2); ctx.fillStyle=withAlpha(GRAY,0.3); ctx.fill();
+  ctx.fillStyle=GRAY; ctx.fillText('Peer (size = GIS)',padL+18,14);
+  ctx.beginPath(); ctx.arc(padL+180,14,6,0,Math.PI*2); ctx.fillStyle=withAlpha(BARCA,0.85); ctx.fill();
+  ctx.fillStyle=GOLD; ctx.fillText('Yamal',padL+192,14);
+}
+
+// ── ANIMATION ENGINE ────────────────────────────────────────────────────────
+const animations={};
+function animate(key, drawFn, duration=1200){
+  if(animations[key]) return;
+  const start=performance.now();
+  function frame(now){
+    const t=Math.min((now-start)/duration,1);
+    const ease=t<.5?4*t*t*t:(t-1)*(2*t-2)*(2*t-2)+1;
+    drawFn(ease);
+    if(t<1) animations[key]=requestAnimationFrame(frame);
+    else animations[key]=null;
+  }
+  animations[key]=requestAnimationFrame(frame);
+}
+
+// ── RADAR VALUES ────────────────────────────────────────────────────────────
+// [Goals,xG,Assists,xA,ChI,PsSec,ThrV,Tackles,DuelDrive,CrossAcc] normalised 0-1
+const yamalRadar=[0.88,0.82,0.78,0.74,0.85,0.58,0.92,0.55,0.90,0.22];
+const sakaRadar= [0.62,0.60,0.48,0.55,0.78,0.50,0.74,0.55,0.48,0.52];
+
+// ── INTERSECTION OBSERVER ────────────────────────────────────────────────────
+const revealEls=document.querySelectorAll('.reveal');
+const chartTargets=[
+  {id:'careerArcCanvas', fn:(p)=>drawCareerArc(document.getElementById('careerArcCanvas'),p)},
+  {id:'radarCanvas',     fn:(p)=>drawRadar(document.getElementById('radarCanvas'),yamalRadar,null,p)},
+  {id:'dualRadarCanvas', fn:(p)=>drawRadar(document.getElementById('dualRadarCanvas'),yamalRadar,sakaRadar,p)},
+  {id:'pizzaCanvas',     fn:(p)=>drawPizza(document.getElementById('pizzaCanvas'),p)},
+  {id:'polarCanvas',     fn:(p)=>drawPolar(document.getElementById('polarCanvas'),p)},
+  {id:'scatterCanvas',   fn:(p)=>drawScatter(document.getElementById('scatterCanvas'),p)},
+];
+
+const textObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('vis');
+  });
+},{threshold:0.15,rootMargin:'0px 0px -60px 0px'});
+
+revealEls.forEach(el=>textObserver.observe(el));
+
+const chartObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id;
+      const target=chartTargets.find(t=>t.id===id);
+      if(target) animate(id,target.fn,1400);
+      chartObserver.unobserve(e.target);
+    }
+  });
+},{threshold:0.3});
+
+chartTargets.forEach(t=>{
+  const el=document.getElementById(t.id);
+  if(el) chartObserver.observe(el);
+});
+
+// ── PROGRESS BAR ─────────────────────────────────────────────────────────────
+const progress=document.getElementById('progress');
+document.addEventListener('scroll',()=>{
+  const scrolled=window.scrollY;
+  const total=document.documentElement.scrollHeight-window.innerHeight;
+  progress.style.width=(scrolled/total*100)+'%';
+});
+
+// Initial draw for hero arc (static)
+window.addEventListener('load',()=>{
+  const arc=document.getElementById('careerArcCanvas');
+  if(arc) drawCareerArc(arc,1);
+});
+</script>
+</body>
+</html>
