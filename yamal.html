@@ -279,8 +279,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 48px;height:60px;d
       <div class="act-text">
         <div class="act-label reveal">Peer Group Mapping</div>
         <h2 class="act-headline reveal">Where he sits among the best in the world.</h2>
-        <p class="act-body reveal">xA on one axis. Goals on the other. Twenty of the best wide forwards in Europe shown in gray. The red dot is Yamal — at 18, in the top-right quadrant. The size of each dot is their Game Impact Score, the metric xG misses entirely.</p>
-        <p class="act-footnote reveal">20 top European wide forwards · min 25 apps · 2025/26 · dot size = GIS · BarcaFutbol</p>
+        <p class="act-body reveal">xA on one axis. Goals on the other. Twelve of the best forwards in Europe shown in gray. The red dot is Yamal — at 18, pushing into the top-right quadrant. The size of each dot is their Game Impact Score, the metric xG misses entirely.</p>
+        <p class="act-footnote reveal">13 European wide forwards & forwards · CSV-verified · 2025/26 · dot size = GIS · BarcaFutbol</p>
       </div>
       <div class="act-chart-wrap reveal">
         <div class="chart-box">
@@ -344,7 +344,7 @@ const YAMAL = {
   ast:     [0.0, 0.2, 0.4, 0.4],
   keyp:    [2.4, 1.5, 1.8, 2.8],
   bcc:     [0.8, 0.5, 0.8, 1.0],
-  drp:     [3.2, 1.3, 4.8, 5.3],
+  drp:     [3.2, 2.9, 4.8, 5.3],
   tack:    [0.8, 2.4, 1.2, 1.4],
   int:     [0.0, 0.9, 0.6, 0.4],
   aps:     [42.6, 34.0, 33.8, 44.5],
@@ -356,22 +356,19 @@ const SAKA = {
 };
 
 const PEERS = [
-  {n:'Salah',  xa:0.38, gls:0.62, gis:14.2},
-  {n:'Vini Jr',xa:0.22, gls:0.55, gis:12.1},
-  {n:'Mbappé', xa:0.19, gls:0.61, gis:11.8},
-  {n:'Raphinha',xa:0.26,gls:0.45, gis:10.9},
-  {n:'Son',    xa:0.24, gls:0.38, gis:9.8},
-  {n:'Pulisic',xa:0.21, gls:0.41, gis:9.2},
-  {n:'Diaz',   xa:0.16, gls:0.33, gis:8.4},
-  {n:'Doku',   xa:0.18, gls:0.25, gis:8.1},
-  {n:'Gnonto', xa:0.14, gls:0.20, gis:7.2},
-  {n:'Zirkzee',xa:0.15, gls:0.27, gis:7.8},
-  {n:'Leao',   xa:0.20, gls:0.35, gis:9.0},
-  {n:'Foden',  xa:0.22, gls:0.30, gis:9.5},
-  {n:'Saka',   xa:0.25, gls:0.30, gis:10.1},
-  {n:'Olise',  xa:0.28, gls:0.40, gis:10.5},
-  {n:'Pedro',  xa:0.15, gls:0.42, gis:9.3},
-  {n:'Yamal',  xa:0.33, gls:0.60, gis:15.8, hero:true},
+  {n:'Yamal',    xa:0.33, gls:0.60, gi:1.0, gis:12.1, hero:true},
+  {n:'Mbappé',   xa:0.24, gls:1.10, gi:1.3, gis:13.6},
+  {n:'Kane',     xa:0.13, gls:1.40, gi:1.5, gis:14.5},
+  {n:'Dembélé',  xa:0.29, gls:0.80, gi:1.3, gis:14.1},
+  {n:'Olise',    xa:0.52, gls:0.50, gi:1.1, gis:13.6},
+  {n:'L.Díaz',   xa:0.25, gls:0.60, gi:1.0, gis:11.5},
+  {n:'Rashford', xa:0.24, gls:0.50, gi:0.9, gis:10.2},
+  {n:'Kvara',    xa:0.24, gls:0.50, gi:0.8, gis:10.0},
+  {n:'Doué',     xa:0.25, gls:0.50, gi:0.7, gis: 9.8},
+  {n:'Barcola',  xa:0.21, gls:0.50, gi:0.6, gis: 9.5},
+  {n:'Salah',    xa:0.27, gls:0.30, gi:0.6, gis: 9.1},
+  {n:'Saka',     xa:0.25, gls:0.30, gi:0.4, gis: 8.6},
+  {n:'Sané',     xa:0.24, gls:0.20, gi:0.4, gis: 7.2},
 ];
 
 // ── PALETTE ───────────────────────────────────────────────────────────────
@@ -692,19 +689,19 @@ function drawScatter(canvas, progress=1){
   const padL=52,padR=24,padT=24,padB=48;
   const cw=w-padL-padR, ch=h-padT-padB;
 
-  const xMin=0.1,xMax=0.45,yMin=0.15,yMax=0.70;
+  const xMin=0.10,xMax=0.58,yMin=0.15,yMax=1.55;
   const toX=v=>(v-xMin)/(xMax-xMin)*cw+padL;
   const toY=v=>(1-(v-yMin)/(yMax-yMin))*ch+padT;
 
   // Grid
-  [0.15,0.25,0.35,0.45,0.55,0.65].forEach(v=>{
+  [0.25,0.50,0.75,1.00,1.25,1.50].forEach(v=>{
     ctx.strokeStyle=withAlpha(GDIM,0.4); ctx.lineWidth=0.5; ctx.setLineDash([2,3]);
     ctx.beginPath(); ctx.moveTo(toX(xMin),toY(v)); ctx.lineTo(toX(xMax),toY(v)); ctx.stroke();
     ctx.fillStyle=GRAY; ctx.font='9px monospace'; ctx.textAlign='right';
     ctx.fillText(v.toFixed(2),padL-4,toY(v)+4);
     ctx.setLineDash([]);
   });
-  [0.15,0.20,0.25,0.30,0.35,0.40].forEach(v=>{
+  [0.15,0.25,0.35,0.45,0.55].forEach(v=>{
     ctx.strokeStyle=withAlpha(GDIM,0.4); ctx.lineWidth=0.5; ctx.setLineDash([2,3]);
     ctx.beginPath(); ctx.moveTo(toX(v),padT); ctx.lineTo(toX(v),h-padB); ctx.stroke();
     ctx.fillStyle=GRAY; ctx.font='9px monospace'; ctx.textAlign='center';
@@ -734,7 +731,7 @@ function drawScatter(canvas, progress=1){
     } else {
       ctx.fillStyle=withAlpha(GRAY,0.25); ctx.fill();
       ctx.strokeStyle=withAlpha(GRAY,0.4); ctx.lineWidth=1; ctx.stroke();
-      if(p.n==='Salah'||p.n==='Mbappé'||p.n==='Saka'){
+      if(['Mbappé','Kane','Dembélé','Olise','L.Díaz','Salah','Saka','Kvara'].includes(p.n)){
         ctx.font='9px monospace'; ctx.fillStyle=withAlpha(GRAY,0.7);
         ctx.textAlign='left'; ctx.fillText(p.n,x+r+3,y+4);
       }
