@@ -1,432 +1,178 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StatsDex — BarcaFutbol Data Stories</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>StatsDex — BarcaFutbol Data Stories</title><meta property="og:type" content="website"><meta property="og:url" content="https://www.statsdex.com/"><meta property="og:site_name" content="StatsDex"><meta property="og:title" content="StatsDex — BarcaFutbol Data Stories"><meta property="og:description" content="The most complete data profiles in football. Player careers. Match breakdowns. Every chart tells a story. Every story changes how you see the game."><meta property="og:image" content="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYzMCIgdmlld0JveD0iMCAwIDEyMDAgNjMwIj4KICA8ZGVmcz4KICAgIDxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8cGF0aCBkPSJNIDYwIDAgTCAwIDAgMCA2MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDE2NSwwLDY4LDAuMDYpIiBzdHJva2Utd2lkdGg9IjAuNSIvPgogICAgPC9wYXR0ZXJuPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJiYXIiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI0E1MDA0NCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNFREJCMDAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8Y2xpcFBhdGggaWQ9InJjIj4KICAgICAgPHJlY3QgeD0iNTgwIiB5PSIwIiB3aWR0aD0iNjIwIiBoZWlnaHQ9IjYzMCIvPgogICAgPC9jbGlwUGF0aD4KICA8L2RlZnM+CgogIDxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYzMCIgZmlsbD0iIzBkMTExNyIvPgogIDxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYzMCIgZmlsbD0idXJsKCNncmlkKSIvPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjQiIGZpbGw9InVybCgjYmFyKSIvPgoKICA8cmVjdCB4PSI4MCIgeT0iNjAiIHdpZHRoPSIyIiBoZWlnaHQ9IjUxMCIgZmlsbD0iI0E1MDA0NCIgb3BhY2l0eT0iMC4yNSIvPgoKICA8IS0tIFdvcmRtYXJrIC0tPgogIDx0ZXh0IHg9IjExNiIgeT0iMTkyIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxMDgiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSI2IiBmaWxsPSIjZjBmNmZjIj5TVEFUUzwvdGV4dD4KICA8dGV4dCB4PSIxMTYiIHk9IjMwNiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTA4IiBmb250LXdlaWdodD0iNzAwIiBsZXR0ZXItc3BhY2luZz0iNiIgZmlsbD0iI0E1MDA0NCI+REVYPC90ZXh0PgoKICA8cmVjdCB4PSIxMTYiIHk9IjMzNCIgd2lkdGg9IjQ2MCIgaGVpZ2h0PSIxIiBmaWxsPSIjM2Q0NDRkIi8+CgogIDx0ZXh0IHg9IjExNiIgeT0iMzgyIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2YwZjZmYyIgZm9udC1zdHlsZT0iaXRhbGljIj5JbnRlcmFjdGl2ZSBkYXRhIHN0b3JpZXMgb24gZm9vdGJhbGwuPC90ZXh0PgogIDx0ZXh0IHg9IjExNiIgeT0iNDIwIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzhiOTQ5ZSIgbGV0dGVyLXNwYWNpbmc9IjAuNSI+VmVyaWZpZWQgZGF0YS4gSW50ZXJhY3RpdmUgdmlzdWFsaXNhdGlvbnMuPC90ZXh0PgoKICA8dGV4dCB4PSIxMTYiIHk9IjUzNiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxldHRlci1zcGFjaW5nPSIzLjUiIGZpbGw9IiMzZDQ0NGQiPkhBQ0tSTElGRSBNRURJQSBMTEMgwrcgQkFSQ0FGVVRCT0wgQU5BTFlUSUNTPC90ZXh0PgogIDx0ZXh0IHg9IjExNiIgeT0iNTU4IiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxMSIgbGV0dGVyLXNwYWNpbmc9IjMiIGZpbGw9IiNBNTAwNDQiPnN0YXRzZGV4LmNvbTwvdGV4dD4KCiAgPCEtLSBSYWRhciBjbGlwcGVkIHRvIHJpZ2h0IC0tPgogIDxnIGNsaXAtcGF0aD0idXJsKCNyYykiIG9wYWNpdHk9IjEiPgogICAgPHBvbHlnb24gcG9pbnRzPSI5NDAuMDAsMjY1LjAwIDk3NS4zNiwyNzkuNjQgOTkwLjAwLDMxNS4wMCA5NzUuMzYsMzUwLjM2IDk0MC4wMCwzNjUuMDAgOTA0LjY0LDM1MC4zNiA4OTAuMDAsMzE1LjAwIDkwNC42NCwyNzkuNjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgxNjUsMCw2OCwwLjEyKSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHBvbHlnb24gcG9pbnRzPSI5NDAuMDAsMjE1LjAwIDEwMTAuNzEsMjQ0LjI5IDEwNDAuMDAsMzE1LjAwIDEwMTAuNzEsMzg1LjcxIDk0MC4wMCw0MTUuMDAgODY5LjI5LDM4NS43MSA4NDAuMDAsMzE1LjAwIDg2OS4yOSwyNDQuMjkiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgxNjUsMCw2OCwwLjEyKSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHBvbHlnb24gcG9pbnRzPSI5NDAuMDAsMTY1LjAwIDEwNDYuMDcsMjA4LjkzIDEwOTAuMDAsMzE1LjAwIDEwNDYuMDcsNDIxLjA3IDk0MC4wMCw0NjUuMDAgODMzLjkzLDQyMS4wNyA3OTAuMDAsMzE1LjAwIDgzMy45MywyMDguOTMiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgxNjUsMCw2OCwwLjEyKSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHBvbHlnb24gcG9pbnRzPSI5NDAuMDAsMTE1LjAwIDEwODEuNDIsMTczLjU4IDExNDAuMDAsMzE1LjAwIDEwODEuNDIsNDU2LjQyIDk0MC4wMCw1MTUuMDAgNzk4LjU4LDQ1Ni40MiA3NDAuMDAsMzE1LjAwIDc5OC41OCwxNzMuNTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgxNjUsMCw2OCwwLjEyKSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KCiAgICA8bGluZSB4MT0iOTQwIiB5MT0iMzE1IiB4Mj0iOTQwLjAwIiB5Mj0iMTE1LjAwIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4wOCkiIHN0cm9rZS13aWR0aD0iMC41Ii8+Cjx0ZXh0IHg9Ijk0MC4wMCIgeT0iOTcuMDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjExIiBmaWxsPSIjQTUwMDQ0IiBvcGFjaXR5PSIwLjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMSI+eEcgLyA5MDwvdGV4dD4KPGxpbmUgeDE9Ijk0MCIgeTE9IjMxNSIgeDI9IjEwODEuNDIiIHkyPSIxNzMuNTgiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA4KSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHRleHQgeD0iMTA5Ni45OCIgeT0iMTYyLjAyIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxMSIgZmlsbD0iI0E1MDA0NCIgb3BhY2l0eT0iMC41NSIgdGV4dC1hbmNob3I9InN0YXJ0IiBsZXR0ZXItc3BhY2luZz0iMSI+U2hvdCBBY2M8L3RleHQ+CjxsaW5lIHgxPSI5NDAiIHkxPSIzMTUiIHgyPSIxMTQwLjAwIiB5Mj0iMzE1LjAwIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4wOCkiIHN0cm9rZS13aWR0aD0iMC41Ii8+Cjx0ZXh0IHg9IjExNjIuMDAiIHk9IjMxOS4wMCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiMyMTk2RjMiIG9wYWNpdHk9IjAuNTUiIHRleHQtYW5jaG9yPSJzdGFydCIgbGV0dGVyLXNwYWNpbmc9IjEiPlRhY2tsZXM8L3RleHQ+CjxsaW5lIHgxPSI5NDAiIHkxPSIzMTUiIHgyPSIxMDgxLjQyIiB5Mj0iNDU2LjQyIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4wOCkiIHN0cm9rZS13aWR0aD0iMC41Ii8+Cjx0ZXh0IHg9IjEwOTYuOTgiIHk9IjQ3NS45OCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiMyMTk2RjMiIG9wYWNpdHk9IjAuNTUiIHRleHQtYW5jaG9yPSJzdGFydCIgbGV0dGVyLXNwYWNpbmc9IjEiPkludGVyY2VwdDwvdGV4dD4KPGxpbmUgeDE9Ijk0MCIgeTE9IjMxNSIgeDI9Ijk0MC4wMCIgeTI9IjUxNS4wMCIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDgpIiBzdHJva2Utd2lkdGg9IjAuNSIvPgo8dGV4dCB4PSI5NDAuMDAiIHk9IjU0MS4wMCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM0Q0FGNTAiIG9wYWNpdHk9IjAuNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSIxIj5QYXNzIEFjYzwvdGV4dD4KPGxpbmUgeDE9Ijk0MCIgeTE9IjMxNSIgeDI9Ijc5OC41OCIgeTI9IjQ1Ni40MiIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDgpIiBzdHJva2Utd2lkdGg9IjAuNSIvPgo8dGV4dCB4PSI3ODMuMDIiIHk9IjQ3NS45OCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM0Q0FGNTAiIG9wYWNpdHk9IjAuNTUiIHRleHQtYW5jaG9yPSJlbmQiIGxldHRlci1zcGFjaW5nPSIxIj5Qcm9nIFBhc3M8L3RleHQ+CjxsaW5lIHgxPSI5NDAiIHkxPSIzMTUiIHgyPSI3NDAuMDAiIHkyPSIzMTUuMDAiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA4KSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHRleHQgeD0iNzE4LjAwIiB5PSIzMTkuMDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjExIiBmaWxsPSIjRURCQjAwIiBvcGFjaXR5PSIwLjU1IiB0ZXh0LWFuY2hvcj0iZW5kIiBsZXR0ZXItc3BhY2luZz0iMSI+RHVlbCBXaW48L3RleHQ+CjxsaW5lIHgxPSI5NDAiIHkxPSIzMTUiIHgyPSI3OTguNTgiIHkyPSIxNzMuNTgiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA4KSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHRleHQgeD0iNzgzLjAyIiB5PSIxNjIuMDIiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjExIiBmaWxsPSIjRURCQjAwIiBvcGFjaXR5PSIwLjU1IiB0ZXh0LWFuY2hvcj0iZW5kIiBsZXR0ZXItc3BhY2luZz0iMSI+QWVyaWFsIFdpbjwvdGV4dD4KCiAgICA8IS0tIFBsYXllciAyIGdob3N0IC0tPgogICAgPHBvbHlnb24gcG9pbnRzPSI5NDAuMDAsMTkzLjAwIDEwNjQuNDUsMTkwLjU1IDEwODguMDAsMzE1LjAwIDEwMTMuNTQsMzg4LjU0IDk0MC4wMCw0ODEuMDAgODI4LjI4LDQyNi43MiA4MTIuMDAsMzE1LjAwIDgxMS4zMSwxODYuMzEiIGZpbGw9InJnYmEoMjM3LDE4NywwLDAuMDQpIiBzdHJva2U9IiNFREJCMDAiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLW9wYWNpdHk9IjAuMyIgc3Ryb2tlLWRhc2hhcnJheT0iNCAzIi8+CiAgICA8IS0tIFBsYXllciAxIGZpbGwgLS0+CiAgICA8cG9seWdvbiBwb2ludHM9Ijk0MC4wMCwxNDEuMDAgMTA0MS44MiwyMTMuMTggMTA2Ni4wMCwzMTUuMDAgMTA1NC41NSw0MjkuNTUgOTQwLjAwLDUwMy4wMCA4NDMuODMsNDExLjE3IDc4Ni4wMCwzMTUuMDAgODYyLjIyLDIzNy4yMiIgZmlsbD0icmdiYSgxNjUsMCw2OCwwLjEpIiBzdHJva2U9IiNBNTAwNDQiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2Utb3BhY2l0eT0iMC43Ii8+CiAgICA8Y2lyY2xlIGN4PSI5NDAuMDAiIGN5PSIxNDEuMDAiIHI9IjMiIGZpbGw9IiNBNTAwNDQiIG9wYWNpdHk9IjAuODUiLz4KPGNpcmNsZSBjeD0iMTA0MS44MiIgY3k9IjIxMy4xOCIgcj0iMyIgZmlsbD0iI0E1MDA0NCIgb3BhY2l0eT0iMC44NSIvPgo8Y2lyY2xlIGN4PSIxMDY2LjAwIiBjeT0iMzE1LjAwIiByPSIzIiBmaWxsPSIjMjE5NkYzIiBvcGFjaXR5PSIwLjg1Ii8+CjxjaXJjbGUgY3g9IjEwNTQuNTUiIGN5PSI0MjkuNTUiIHI9IjMiIGZpbGw9IiMyMTk2RjMiIG9wYWNpdHk9IjAuODUiLz4KPGNpcmNsZSBjeD0iOTQwLjAwIiBjeT0iNTAzLjAwIiByPSIzIiBmaWxsPSIjNENBRjUwIiBvcGFjaXR5PSIwLjg1Ii8+CjxjaXJjbGUgY3g9Ijg0My44MyIgY3k9IjQxMS4xNyIgcj0iMyIgZmlsbD0iIzRDQUY1MCIgb3BhY2l0eT0iMC44NSIvPgo8Y2lyY2xlIGN4PSI3ODYuMDAiIGN5PSIzMTUuMDAiIHI9IjMiIGZpbGw9IiNFREJCMDAiIG9wYWNpdHk9IjAuODUiLz4KPGNpcmNsZSBjeD0iODYyLjIyIiBjeT0iMjM3LjIyIiByPSIzIiBmaWxsPSIjRURCQjAwIiBvcGFjaXR5PSIwLjg1Ii8+CgogICAgPGNpcmNsZSBjeD0iOTQwIiBjeT0iMzE1IiByPSIzIiBmaWxsPSIjQTUwMDQ0IiBvcGFjaXR5PSIwLjUiLz4KICA8L2c+CgogIDwhLS0gTGVmdCBmYWRlIG92ZXIgcmFkYXIgLS0+CiAgPHJlY3QgeD0iNTUwIiB5PSIwIiB3aWR0aD0iMTgwIiBoZWlnaHQ9IjYzMCIgZmlsbD0iIzBkMTExNyIgb3BhY2l0eT0iMC43Ii8+CgogIDxyZWN0IHg9IjAiIHk9IjYyNiIgd2lkdGg9IjEyMDAiIGhlaWdodD0iNCIgZmlsbD0idXJsKCNiYXIpIi8+Cjwvc3ZnPg=="><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@barcafutbol"><meta name="twitter:title" content="StatsDex — BarcaFutbol Data Stories"><meta name="twitter:description" content="The most complete data profiles in football. Player careers. Match breakdowns. Every chart tells a story."><meta name="twitter:image" content="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYzMCIgdmlld0JveD0iMCAwIDEyMDAgNjMwIj4KICA8ZGVmcz4KICAgIDxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8cGF0aCBkPSJNIDYwIDAgTCAwIDAgMCA2MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDE2NSwwLDY4LDAuMDYpIiBzdHJva2Utd2lkdGg9IjAuNSIvPgogICAgPC9wYXR0ZXJuPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJiYXIiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjAlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI0E1MDA0NCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNFREJCMDAiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8Y2xpcFBhdGggaWQ9InJjIj4KICAgICAgPHJlY3QgeD0iNTgwIiB5PSIwIiB3aWR0aD0iNjIwIiBoZWlnaHQ9IjYzMCIvPgogICAgPC9jbGlwUGF0aD4KICA8L2RlZnM+CgogIDxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYzMCIgZmlsbD0iIzBkMTExNyIvPgogIDxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjYzMCIgZmlsbD0idXJsKCNncmlkKSIvPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjQiIGZpbGw9InVybCgjYmFyKSIvPgoKICA8cmVjdCB4PSI4MCIgeT0iNjAiIHdpZHRoPSIyIiBoZWlnaHQ9IjUxMCIgZmlsbD0iI0E1MDA0NCIgb3BhY2l0eT0iMC4yNSIvPgoKICA8IS0tIFdvcmRtYXJrIC0tPgogIDx0ZXh0IHg9IjExNiIgeT0iMTkyIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxMDgiIGZvbnQtd2VpZ2h0PSI3MDAiIGxldHRlci1zcGFjaW5nPSI2IiBmaWxsPSIjZjBmNmZjIj5TVEFUUzwvdGV4dD4KICA8dGV4dCB4PSIxMTYiIHk9IjMwNiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTA4IiBmb250LXdlaWdodD0iNzAwIiBsZXR0ZXItc3BhY2luZz0iNiIgZmlsbD0iI0E1MDA0NCI+REVYPC90ZXh0PgoKICA8cmVjdCB4PSIxMTYiIHk9IjMzNCIgd2lkdGg9IjQ2MCIgaGVpZ2h0PSIxIiBmaWxsPSIjM2Q0NDRkIi8+CgogIDx0ZXh0IHg9IjExNiIgeT0iMzgyIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIyNCIgZmlsbD0iI2YwZjZmYyIgZm9udC1zdHlsZT0iaXRhbGljIj5JbnRlcmFjdGl2ZSBkYXRhIHN0b3JpZXMgb24gZm9vdGJhbGwuPC90ZXh0PgogIDx0ZXh0IHg9IjExNiIgeT0iNDIwIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzhiOTQ5ZSIgbGV0dGVyLXNwYWNpbmc9IjAuNSI+VmVyaWZpZWQgZGF0YS4gSW50ZXJhY3RpdmUgdmlzdWFsaXNhdGlvbnMuPC90ZXh0PgoKICA8dGV4dCB4PSIxMTYiIHk9IjUzNiIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGxldHRlci1zcGFjaW5nPSIzLjUiIGZpbGw9IiMzZDQ0NGQiPkhBQ0tSTElGRSBNRURJQSBMTEMgwrcgQkFSQ0FGVVRCT0wgQU5BTFlUSUNTPC90ZXh0PgogIDx0ZXh0IHg9IjExNiIgeT0iNTU4IiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxMSIgbGV0dGVyLXNwYWNpbmc9IjMiIGZpbGw9IiNBNTAwNDQiPnN0YXRzZGV4LmNvbTwvdGV4dD4KCiAgPCEtLSBSYWRhciBjbGlwcGVkIHRvIHJpZ2h0IC0tPgogIDxnIGNsaXAtcGF0aD0idXJsKCNyYykiIG9wYWNpdHk9IjEiPgogICAgPHBvbHlnb24gcG9pbnRzPSI5NDAuMDAsMjY1LjAwIDk3NS4zNiwyNzkuNjQgOTkwLjAwLDMxNS4wMCA5NzUuMzYsMzUwLjM2IDk0MC4wMCwzNjUuMDAgOTA0LjY0LDM1MC4zNiA4OTAuMDAsMzE1LjAwIDkwNC42NCwyNzkuNjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgxNjUsMCw2OCwwLjEyKSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHBvbHlnb24gcG9pbnRzPSI5NDAuMDAsMjE1LjAwIDEwMTAuNzEsMjQ0LjI5IDEwNDAuMDAsMzE1LjAwIDEwMTAuNzEsMzg1LjcxIDk0MC4wMCw0MTUuMDAgODY5LjI5LDM4NS43MSA4NDAuMDAsMzE1LjAwIDg2OS4yOSwyNDQuMjkiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgxNjUsMCw2OCwwLjEyKSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHBvbHlnb24gcG9pbnRzPSI5NDAuMDAsMTY1LjAwIDEwNDYuMDcsMjA4LjkzIDEwOTAuMDAsMzE1LjAwIDEwNDYuMDcsNDIxLjA3IDk0MC4wMCw0NjUuMDAgODMzLjkzLDQyMS4wNyA3OTAuMDAsMzE1LjAwIDgzMy45MywyMDguOTMiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgxNjUsMCw2OCwwLjEyKSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHBvbHlnb24gcG9pbnRzPSI5NDAuMDAsMTE1LjAwIDEwODEuNDIsMTczLjU4IDExNDAuMDAsMzE1LjAwIDEwODEuNDIsNDU2LjQyIDk0MC4wMCw1MTUuMDAgNzk4LjU4LDQ1Ni40MiA3NDAuMDAsMzE1LjAwIDc5OC41OCwxNzMuNTgiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgxNjUsMCw2OCwwLjEyKSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KCiAgICA8bGluZSB4MT0iOTQwIiB5MT0iMzE1IiB4Mj0iOTQwLjAwIiB5Mj0iMTE1LjAwIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4wOCkiIHN0cm9rZS13aWR0aD0iMC41Ii8+Cjx0ZXh0IHg9Ijk0MC4wMCIgeT0iOTcuMDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjExIiBmaWxsPSIjQTUwMDQ0IiBvcGFjaXR5PSIwLjU1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMSI+eEcgLyA5MDwvdGV4dD4KPGxpbmUgeDE9Ijk0MCIgeTE9IjMxNSIgeDI9IjEwODEuNDIiIHkyPSIxNzMuNTgiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA4KSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHRleHQgeD0iMTA5Ni45OCIgeT0iMTYyLjAyIiBmb250LWZhbWlseT0iR2VvcmdpYSxzZXJpZiIgZm9udC1zaXplPSIxMSIgZmlsbD0iI0E1MDA0NCIgb3BhY2l0eT0iMC41NSIgdGV4dC1hbmNob3I9InN0YXJ0IiBsZXR0ZXItc3BhY2luZz0iMSI+U2hvdCBBY2M8L3RleHQ+CjxsaW5lIHgxPSI5NDAiIHkxPSIzMTUiIHgyPSIxMTQwLjAwIiB5Mj0iMzE1LjAwIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4wOCkiIHN0cm9rZS13aWR0aD0iMC41Ii8+Cjx0ZXh0IHg9IjExNjIuMDAiIHk9IjMxOS4wMCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiMyMTk2RjMiIG9wYWNpdHk9IjAuNTUiIHRleHQtYW5jaG9yPSJzdGFydCIgbGV0dGVyLXNwYWNpbmc9IjEiPlRhY2tsZXM8L3RleHQ+CjxsaW5lIHgxPSI5NDAiIHkxPSIzMTUiIHgyPSIxMDgxLjQyIiB5Mj0iNDU2LjQyIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4wOCkiIHN0cm9rZS13aWR0aD0iMC41Ii8+Cjx0ZXh0IHg9IjEwOTYuOTgiIHk9IjQ3NS45OCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiMyMTk2RjMiIG9wYWNpdHk9IjAuNTUiIHRleHQtYW5jaG9yPSJzdGFydCIgbGV0dGVyLXNwYWNpbmc9IjEiPkludGVyY2VwdDwvdGV4dD4KPGxpbmUgeDE9Ijk0MCIgeTE9IjMxNSIgeDI9Ijk0MC4wMCIgeTI9IjUxNS4wMCIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDgpIiBzdHJva2Utd2lkdGg9IjAuNSIvPgo8dGV4dCB4PSI5NDAuMDAiIHk9IjU0MS4wMCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM0Q0FGNTAiIG9wYWNpdHk9IjAuNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSIxIj5QYXNzIEFjYzwvdGV4dD4KPGxpbmUgeDE9Ijk0MCIgeTE9IjMxNSIgeDI9Ijc5OC41OCIgeTI9IjQ1Ni40MiIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDgpIiBzdHJva2Utd2lkdGg9IjAuNSIvPgo8dGV4dCB4PSI3ODMuMDIiIHk9IjQ3NS45OCIgZm9udC1mYW1pbHk9Ikdlb3JnaWEsc2VyaWYiIGZvbnQtc2l6ZT0iMTEiIGZpbGw9IiM0Q0FGNTAiIG9wYWNpdHk9IjAuNTUiIHRleHQtYW5jaG9yPSJlbmQiIGxldHRlci1zcGFjaW5nPSIxIj5Qcm9nIFBhc3M8L3RleHQ+CjxsaW5lIHgxPSI5NDAiIHkxPSIzMTUiIHgyPSI3NDAuMDAiIHkyPSIzMTUuMDAiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA4KSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHRleHQgeD0iNzE4LjAwIiB5PSIzMTkuMDAiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjExIiBmaWxsPSIjRURCQjAwIiBvcGFjaXR5PSIwLjU1IiB0ZXh0LWFuY2hvcj0iZW5kIiBsZXR0ZXItc3BhY2luZz0iMSI+RHVlbCBXaW48L3RleHQ+CjxsaW5lIHgxPSI5NDAiIHkxPSIzMTUiIHgyPSI3OTguNTgiIHkyPSIxNzMuNTgiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA4KSIgc3Ryb2tlLXdpZHRoPSIwLjUiLz4KPHRleHQgeD0iNzgzLjAyIiB5PSIxNjIuMDIiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjExIiBmaWxsPSIjRURCQjAwIiBvcGFjaXR5PSIwLjU1IiB0ZXh0LWFuY2hvcj0iZW5kIiBsZXR0ZXItc3BhY2luZz0iMSI+QWVyaWFsIFdpbjwvdGV4dD4KCiAgICA8IS0tIFBsYXllciAyIGdob3N0IC0tPgogICAgPHBvbHlnb24gcG9pbnRzPSI5NDAuMDAsMTkzLjAwIDEwNjQuNDUsMTkwLjU1IDEwODguMDAsMzE1LjAwIDEwMTMuNTQsMzg4LjU0IDk0MC4wMCw0ODEuMDAgODI4LjI4LDQyNi43MiA4MTIuMDAsMzE1LjAwIDgxMS4zMSwxODYuMzEiIGZpbGw9InJnYmEoMjM3LDE4NywwLDAuMDQpIiBzdHJva2U9IiNFREJCMDAiIHN0cm9rZS13aWR0aD0iMSIgc3Ryb2tlLW9wYWNpdHk9IjAuMyIgc3Ryb2tlLWRhc2hhcnJheT0iNCAzIi8+CiAgICA8IS0tIFBsYXllciAxIGZpbGwgLS0+CiAgICA8cG9seWdvbiBwb2ludHM9Ijk0MC4wMCwxNDEuMDAgMTA0MS44MiwyMTMuMTggMTA2Ni4wMCwzMTUuMDAgMTA1NC41NSw0MjkuNTUgOTQwLjAwLDUwMy4wMCA4NDMuODMsNDExLjE3IDc4Ni4wMCwzMTUuMDAgODYyLjIyLDIzNy4yMiIgZmlsbD0icmdiYSgxNjUsMCw2OCwwLjEpIiBzdHJva2U9IiNBNTAwNDQiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2Utb3BhY2l0eT0iMC43Ii8+CiAgICA8Y2lyY2xlIGN4PSI5NDAuMDAiIGN5PSIxNDEuMDAiIHI9IjMiIGZpbGw9IiNBNTAwNDQiIG9wYWNpdHk9IjAuODUiLz4KPGNpcmNsZSBjeD0iMTA0MS44MiIgY3k9IjIxMy4xOCIgcj0iMyIgZmlsbD0iI0E1MDA0NCIgb3BhY2l0eT0iMC44NSIvPgo8Y2lyY2xlIGN4PSIxMDY2LjAwIiBjeT0iMzE1LjAwIiByPSIzIiBmaWxsPSIjMjE5NkYzIiBvcGFjaXR5PSIwLjg1Ii8+CjxjaXJjbGUgY3g9IjEwNTQuNTUiIGN5PSI0MjkuNTUiIHI9IjMiIGZpbGw9IiMyMTk2RjMiIG9wYWNpdHk9IjAuODUiLz4KPGNpcmNsZSBjeD0iOTQwLjAwIiBjeT0iNTAzLjAwIiByPSIzIiBmaWxsPSIjNENBRjUwIiBvcGFjaXR5PSIwLjg1Ii8+CjxjaXJjbGUgY3g9Ijg0My44MyIgY3k9IjQxMS4xNyIgcj0iMyIgZmlsbD0iIzRDQUY1MCIgb3BhY2l0eT0iMC44NSIvPgo8Y2lyY2xlIGN4PSI3ODYuMDAiIGN5PSIzMTUuMDAiIHI9IjMiIGZpbGw9IiNFREJCMDAiIG9wYWNpdHk9IjAuODUiLz4KPGNpcmNsZSBjeD0iODYyLjIyIiBjeT0iMjM3LjIyIiByPSIzIiBmaWxsPSIjRURCQjAwIiBvcGFjaXR5PSIwLjg1Ii8+CgogICAgPGNpcmNsZSBjeD0iOTQwIiBjeT0iMzE1IiByPSIzIiBmaWxsPSIjQTUwMDQ0IiBvcGFjaXR5PSIwLjUiLz4KICA8L2c+CgogIDwhLS0gTGVmdCBmYWRlIG92ZXIgcmFkYXIgLS0+CiAgPHJlY3QgeD0iNTUwIiB5PSIwIiB3aWR0aD0iMTgwIiBoZWlnaHQ9IjYzMCIgZmlsbD0iIzBkMTExNyIgb3BhY2l0eT0iMC43Ii8+CgogIDxyZWN0IHg9IjAiIHk9IjYyNiIgd2lkdGg9IjEyMDAiIGhlaWdodD0iNCIgZmlsbD0idXJsKCNiYXIpIi8+Cjwvc3ZnPg=="><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"><style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0d1117;--bg2:#0d1b2a;--bg3:#161b22;--barca:#A50044;--gold:#EDBB00;--white:#f0f6fc;--gray:#8b949e;--gray-dim:#3d444d;--pass:#4CAF50;--def:#2196F3;--atkhi:#ffd60a;--atklo:#e63946}
+:root{--bg:#0d1117;--bg2:#0d1b2a;--bg3:#161b22;--r:#A50044;--g:#EDBB00;--w:#f0f6fc;--gr:#8b949e;--gd:#3d444d;--p:#4CAF50;--d:#2196F3;--ah:#ffd60a;--al:#e63946}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--white);font-family:'DM Mono',monospace;overflow-x:hidden;cursor:default}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;background:rgba(13,17,23,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(165,0,68,0.2)}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--white);text-decoration:none}
-.nav-logo span{color:var(--barca)}
+body{background:var(--bg);color:var(--w);font-family:'DM Mono',monospace;overflow-x:hidden}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;background:rgba(13,17,23,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(165,0,68,.2)}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--w);text-decoration:none}
+.logo s,.fb s,.ab s{color:var(--r);text-decoration:none}
 .nav-links{display:flex;align-items:center;gap:4px}
-.nav-link{font-size:11px;letter-spacing:1.5px;color:var(--gray);text-decoration:none;text-transform:uppercase;padding:6px 12px;transition:all .2s;border-radius:2px}
-.nav-link:hover{color:var(--white);background:rgba(255,255,255,0.05)}
-.nav-cta{font-size:11px;letter-spacing:1.5px;padding:7px 18px;border:1px solid var(--barca);color:var(--barca);text-decoration:none;text-transform:uppercase;transition:all .2s;border-radius:2px;margin-left:8px}
-.nav-cta:hover{background:var(--barca);color:var(--white)}
+a.nl{font-size:11px;letter-spacing:1.5px;color:var(--gr);text-decoration:none;text-transform:uppercase;padding:6px 12px;transition:all .2s;border-radius:2px}
+a.nl:hover{color:var(--w);background:rgba(255,255,255,.05)}
+a.cta{font-size:11px;letter-spacing:1.5px;padding:7px 18px;border:1px solid var(--r);color:var(--r);text-decoration:none;text-transform:uppercase;transition:all .2s;border-radius:2px;margin-left:8px}
+a.cta:hover{background:var(--r);color:var(--w)}
+/* HERO */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 40px 80px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(165,0,68,0.08) 0%,transparent 70%);pointer-events:none}
-.hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(165,0,68,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(165,0,68,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
-.hero-eyebrow{font-size:11px;letter-spacing:4px;color:var(--barca);text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fadeUp .8s .2s forwards}
-.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,10vw,120px);letter-spacing:4px;line-height:0.95;color:var(--white);margin-bottom:20px;opacity:0;animation:fadeUp .8s .4s forwards}
-.hero-title span{color:var(--barca)}
-.hero-subtitle{font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,22px);color:#d4dde6;max-width:600px;line-height:1.6;margin-bottom:48px;opacity:0;animation:fadeUp .8s .6s forwards;font-style:italic}
-.hero-stats{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .8s forwards}
-.hero-stat .n{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--gold);line-height:1}
-.hero-stat .l{font-size:10px;letter-spacing:2px;color:#d4dde6;text-transform:uppercase;margin-top:4px}
-.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp .8s 1.2s forwards}
-.scroll-hint span{font-size:10px;letter-spacing:3px;color:var(--gray);text-transform:uppercase}
-.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--barca),transparent);animation:scrollPulse 2s infinite}
-.pillar-nav{position:sticky;top:60px;z-index:90;background:rgba(13,17,23,0.98);backdrop-filter:blur(16px);border-bottom:1px solid var(--gray-dim);display:flex}
-.pillar-btn{flex:1;height:52px;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gray);text-decoration:none;border-bottom:2px solid transparent;transition:all .3s}
-.pillar-btn:hover{color:var(--white)}
-.pillar-btn.active{color:var(--white);border-bottom-color:var(--barca)}
-.pillar-dot{width:6px;height:6px;border-radius:50%;background:var(--gray-dim);transition:all .3s;flex-shrink:0}
-.pillar-btn.active .pillar-dot{background:var(--barca);box-shadow:0 0 8px rgba(165,0,68,.6)}
-.pillar-count{font-size:9px;color:var(--gray-dim)}
-.section-block{padding:72px 40px 24px;max-width:1200px;margin:0 auto;opacity:0;transform:translateY(24px);transition:all .8s cubic-bezier(.16,1,.3,1)}
-.section-block.visible{opacity:1;transform:translateY(0)}
-.section-eyebrow{font-size:9px;letter-spacing:4px;color:var(--barca);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px}
-.section-eyebrow::before{content:'';width:20px;height:1px;background:var(--barca)}
-.section-title{font-family:'Playfair Display',serif;font-size:clamp(24px,3.5vw,40px);color:var(--white);line-height:1.15;margin-bottom:10px}
-.section-body{font-size:13px;color:#d4dde6;line-height:1.75;max-width:560px}
-.card-grid{padding:24px 40px 80px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px}
-.card{background:var(--bg2);border:1px solid var(--gray-dim);border-radius:8px;overflow:hidden;text-decoration:none;display:block;transition:all .4s cubic-bezier(.16,1,.3,1);opacity:0;transform:translateY(40px);position:relative}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(165,0,68,.08) 0%,transparent 70%);pointer-events:none}
+.hgb{position:absolute;inset:0;background-image:linear-gradient(rgba(165,0,68,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(165,0,68,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.he{font-size:11px;letter-spacing:4px;color:var(--r);text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fu .8s .2s forwards}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,10vw,120px);letter-spacing:4px;line-height:.95;margin-bottom:20px;opacity:0;animation:fu .8s .4s forwards}
+h1 s{color:var(--r);text-decoration:none}
+.hs{font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,22px);color:#d4dde6;max-width:600px;line-height:1.6;margin-bottom:48px;opacity:0;animation:fu .8s .6s forwards;font-style:italic}
+.hst{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fu .8s .8s forwards}
+.hst .n{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--g);line-height:1}
+.hst .l{font-size:10px;letter-spacing:2px;color:#d4dde6;text-transform:uppercase;margin-top:4px}
+.sh{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fu .8s 1.2s forwards}
+.sh span{font-size:10px;letter-spacing:3px;color:var(--gr);text-transform:uppercase}
+.sl{width:1px;height:48px;background:linear-gradient(to bottom,var(--r),transparent);animation:sp 2s infinite}
+/* PILLAR NAV */
+.pn{position:sticky;top:60px;z-index:90;background:rgba(13,17,23,.98);backdrop-filter:blur(16px);border-bottom:1px solid var(--gd);display:flex}
+a.pb{flex:1;height:52px;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gr);text-decoration:none;border-bottom:2px solid transparent;transition:all .3s}
+a.pb:hover{color:var(--w)}
+a.pb.active{color:var(--w);border-bottom-color:var(--r)}
+.pd{width:6px;height:6px;border-radius:50%;background:var(--gd);transition:all .3s;flex-shrink:0}
+a.pb.active .pd{background:var(--r);box-shadow:0 0 8px rgba(165,0,68,.6)}
+.pc{font-size:9px;color:var(--gd)}
+/* SECTIONS */
+.sb{padding:72px 40px 24px;max-width:1200px;margin:0 auto;opacity:0;transform:translateY(24px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.sb.visible{opacity:1;transform:translateY(0)}
+.ey{font-size:9px;letter-spacing:4px;color:var(--r);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.ey::before{content:'';width:20px;height:1px;background:var(--r)}
+h2{font-family:'Playfair Display',serif;font-size:clamp(24px,3.5vw,40px);line-height:1.15;margin-bottom:10px}
+.bd{font-size:13px;color:#d4dde6;line-height:1.75;max-width:560px}
+/* CARDS */
+.cg{padding:24px 40px 80px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px}
+.card{background:var(--bg2);border:1px solid var(--gd);border-radius:8px;overflow:hidden;text-decoration:none;display:block;transition:all .4s cubic-bezier(.16,1,.3,1);opacity:0;transform:translateY(40px);position:relative}
 .card.visible{opacity:1;transform:translateY(0)}
-.card:hover{border-color:var(--barca);transform:translateY(-6px)}
-.card:hover .card-bar{width:100%}
-.card-bar{position:absolute;top:0;left:0;height:3px;width:0;transition:width .4s cubic-bezier(.16,1,.3,1)}
-.card-inner{padding:32px 28px}
-.card-eyebrow{font-size:10px;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.card-eyebrow::before{content:'';width:20px;height:1px;background:var(--barca)}
-.card-archetype{display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;margin-bottom:16px}
-.card-name{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:2px;line-height:1;margin-bottom:4px}
-.card-meta{font-size:11px;color:#d4dde6;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:28px}
-.card-headline-num{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;margin-bottom:4px}
-.card-headline-label{font-size:10px;letter-spacing:2px;color:#d4dde6;text-transform:uppercase;margin-bottom:28px}
-.card-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--gray-dim);padding-top:20px;margin-bottom:28px}
-.card-stat{text-align:center;padding:0 8px}
-.card-stat:not(:last-child){border-right:1px solid var(--gray-dim)}
-.card-stat .v{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;margin-bottom:2px}
-.card-stat .l{font-size:9px;letter-spacing:1.5px;color:#d4dde6;text-transform:uppercase}
-.card-cta{display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 0 0;border-top:1px solid var(--gray-dim)}
-.card-arrow{width:28px;height:28px;border:1px solid;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .3s}
-.card:hover .card-arrow{transform:translateX(4px)}
-.match-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.match-competition{font-size:9px;letter-spacing:3px;color:var(--barca);text-transform:uppercase;display:flex;align-items:center;gap:8px}
-.match-competition::before{content:'';width:16px;height:1px;background:var(--barca)}
-.match-date{font-size:10px;color:var(--gray-dim)}
-.match-teams{display:flex;align-items:center;margin-bottom:8px}
-.match-team{flex:1}
-.match-team-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1;color:var(--white)}
-.match-team-detail{font-size:9px;letter-spacing:1.5px;color:var(--gray);text-transform:uppercase;margin-top:2px}
-.match-score{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 16px;min-width:80px}
-.match-score-num{font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;letter-spacing:2px}
-.match-score-label{font-size:8px;letter-spacing:2px;color:var(--gray-dim);text-transform:uppercase;margin-top:2px}
-.match-team.away{text-align:right}
-.match-divider{height:1px;background:var(--gray-dim);margin:20px 0}
-.match-headline{font-family:'Playfair Display',serif;font-size:15px;color:#d4dde6;line-height:1.5;margin-bottom:20px;font-style:italic}
-.card-coming{opacity:0.35;cursor:default;pointer-events:none}
-.card-coming:hover{transform:none!important;border-color:var(--gray-dim)!important}
-.card-coming .card-bar{display:none}
-.coaches-teaser{padding:0 40px 80px;max-width:1200px;margin:0 auto}
-.coaches-strip{border:1px solid var(--gray-dim);border-radius:8px;padding:48px;display:flex;align-items:center;justify-content:space-between;gap:40px;opacity:0;transform:translateY(20px);transition:all .8s;background:var(--bg2)}
-.coaches-strip.visible{opacity:1;transform:translateY(0)}
-.coaches-strip-text .eyebrow{font-size:9px;letter-spacing:4px;color:var(--gray-dim);text-transform:uppercase;margin-bottom:10px}
-.coaches-strip-text h3{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--gray-dim);margin-bottom:8px}
-.coaches-strip-text p{font-size:13px;color:var(--gray-dim);line-height:1.7;max-width:480px}
-.coaches-badge{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:3px;color:var(--gray-dim);border:1px solid var(--gray-dim);padding:8px 20px;border-radius:2px;white-space:nowrap;flex-shrink:0}
-.sources-strip{padding:0 40px 48px;max-width:1200px;margin:0 auto;opacity:0;transform:translateY(16px);transition:all .8s .3s}
-.sources-strip.visible{opacity:1;transform:translateY(0)}
-.sources-label{font-size:9px;letter-spacing:3px;color:var(--gray-dim);text-transform:uppercase;margin-bottom:10px}
-.sources-pills{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.src-pill{font-size:10px;font-family:'DM Mono',monospace;padding:4px 12px;border-radius:3px;letter-spacing:.5px}
-.src-data{background:rgba(33,150,243,0.08);color:var(--def);border:1px solid rgba(33,150,243,0.2)}
-.src-prop{background:rgba(165,0,68,0.08);color:#e07090;border:1px solid rgba(165,0,68,0.2)}
-.src-divider{width:1px;height:16px;background:var(--gray-dim);margin:0 4px}
-.about-section{background:var(--bg2);border-top:1px solid var(--gray-dim);padding:80px 40px 60px}
-.about-inner{max-width:1200px;margin:0 auto}
-.about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;margin-bottom:56px}
-.about-eyebrow{font-size:10px;letter-spacing:3px;color:var(--barca);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.about-eyebrow::before{content:'';width:20px;height:1px;background:var(--barca)}
-.about-body{font-size:13px;color:#d4dde6;line-height:1.75;margin-bottom:14px}
-.about-link{font-size:11px;letter-spacing:1.5px;color:var(--white);text-decoration:none;text-transform:uppercase;border-bottom:1px solid var(--gray-dim);padding-bottom:2px;transition:border-color .2s}
-.about-link:hover{border-color:var(--barca);color:var(--barca)}
-.about-bottom{border-top:1px solid var(--gray-dim);padding-top:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
-.about-brand{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--gray-dim)}
-.about-brand span{color:var(--barca)}
-.about-meta{display:flex;align-items:center;gap:10px;font-size:11px}
-.about-meta-link{color:var(--gray);text-decoration:none;transition:color .2s;letter-spacing:.5px}
-.about-meta-link:hover{color:var(--white)}
-.about-dot{color:var(--gray-dim)}
-footer{border-top:1px solid var(--gray-dim);padding:48px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;max-width:1200px;margin:0 auto}
-.footer-brand{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--gray-dim)}
-.footer-brand span{color:var(--barca)}
-.footer-meta{font-size:11px;color:var(--gray-dim);line-height:1.6;text-align:right}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes scrollPulse{0%,100%{opacity:.3}50%{opacity:1}}
+.card:hover{border-color:var(--r);transform:translateY(-6px)}
+.card:hover .cb{width:100%}
+.card:hover .ca{transform:translateX(4px)}
+.cb{position:absolute;top:0;left:0;height:3px;width:0;transition:width .4s cubic-bezier(.16,1,.3,1)}
+.ci{padding:32px 28px}
+.ce{font-size:10px;letter-spacing:3px;color:var(--gr);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.ce::before{content:'';width:20px;height:1px;background:var(--r)}
+.ct{display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;margin-bottom:16px}
+.cn{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:2px;line-height:1;margin-bottom:4px}
+.cm{font-size:11px;color:#d4dde6;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:28px}
+.chn{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;margin-bottom:4px}
+.chl{font-size:10px;letter-spacing:2px;color:#d4dde6;text-transform:uppercase;margin-bottom:28px}
+.cs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--gd);padding-top:20px;margin-bottom:28px}
+.cv{text-align:center;padding:0 8px}
+.cv:not(:last-child){border-right:1px solid var(--gd)}
+.cv .v{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;margin-bottom:2px}
+.cv .l{font-size:9px;letter-spacing:1.5px;color:#d4dde6;text-transform:uppercase}
+.cc{display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 0 0;border-top:1px solid var(--gd)}
+.ca{width:28px;height:28px;border:1px solid;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .3s}
+/* MATCH CARD */
+.mh{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.mc{font-size:9px;letter-spacing:3px;color:var(--r);text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.mc::before{content:'';width:16px;height:1px;background:var(--r)}
+.md{font-size:10px;color:var(--gd)}
+.mt{display:flex;align-items:center;margin-bottom:8px}
+.mt .t{flex:1}
+.mt .t .n{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1}
+.mt .t .d{font-size:9px;letter-spacing:1.5px;color:var(--gr);text-transform:uppercase;margin-top:2px}
+.ms{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 16px;min-width:80px}
+.ms .n{font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;letter-spacing:2px}
+.ms .l{font-size:8px;letter-spacing:2px;color:var(--gd);text-transform:uppercase;margin-top:2px}
+.mt .t.aw{text-align:right}
+.mdv{height:1px;background:var(--gd);margin:20px 0}
+.mhl{font-family:'Playfair Display',serif;font-size:15px;color:#d4dde6;line-height:1.5;margin-bottom:20px;font-style:italic}
+/* COMING */
+.coming{opacity:.35;cursor:default;pointer-events:none}
+.coming:hover{transform:none!important;border-color:var(--gd)!important}
+.coming .cb{display:none}
+.cs-center{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;text-align:center}
+.cs-label{font-size:11px;letter-spacing:3px;color:var(--gd);text-transform:uppercase;margin-bottom:16px}
+.cs-name{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gd);letter-spacing:2px;line-height:1.3}
+.cs-sub{font-size:11px;color:var(--gd);margin-top:12px}
+/* COACHES */
+.ct-wrap{padding:0 40px 80px;max-width:1200px;margin:0 auto}
+.cs-strip{border:1px solid var(--gd);border-radius:8px;padding:48px;display:flex;align-items:center;justify-content:space-between;gap:40px;opacity:0;transform:translateY(20px);transition:all .8s;background:var(--bg2)}
+.cs-strip.visible{opacity:1;transform:translateY(0)}
+.cs-strip .ey2{font-size:9px;letter-spacing:4px;color:var(--gd);text-transform:uppercase;margin-bottom:10px}
+.cs-strip h3{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--gd);margin-bottom:8px}
+.cs-strip p{font-size:13px;color:var(--gd);line-height:1.7;max-width:480px}
+.cs-badge{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:3px;color:var(--gd);border:1px solid var(--gd);padding:8px 20px;border-radius:2px;white-space:nowrap;flex-shrink:0}
+/* SOURCES */
+.src{padding:0 40px 48px;max-width:1200px;margin:0 auto;opacity:0;transform:translateY(16px);transition:all .8s .3s}
+.src.visible{opacity:1;transform:translateY(0)}
+.src-lbl{font-size:9px;letter-spacing:3px;color:var(--gd);text-transform:uppercase;margin-bottom:10px}
+.src-pills{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sp{font-size:10px;font-family:'DM Mono',monospace;padding:4px 12px;border-radius:3px;letter-spacing:.5px}
+.sp-d{background:rgba(33,150,243,.08);color:var(--d);border:1px solid rgba(33,150,243,.2)}
+.sp-p{background:rgba(165,0,68,.08);color:#e07090;border:1px solid rgba(165,0,68,.2)}
+.sdiv{width:1px;height:16px;background:var(--gd);margin:0 4px}
+/* ABOUT */
+.about{background:var(--bg2);border-top:1px solid var(--gd);padding:80px 40px 60px}
+.ai{max-width:1200px;margin:0 auto}
+.ag{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;margin-bottom:56px}
+.ae{font-size:10px;letter-spacing:3px;color:var(--r);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.ae::before{content:'';width:20px;height:1px;background:var(--r)}
+.ab{font-size:13px;color:#d4dde6;line-height:1.75;margin-bottom:14px}
+a.al{font-size:11px;letter-spacing:1.5px;color:var(--w);text-decoration:none;text-transform:uppercase;border-bottom:1px solid var(--gd);padding-bottom:2px;transition:border-color .2s}
+a.al:hover{border-color:var(--r);color:var(--r)}
+.abot{border-top:1px solid var(--gd);padding-top:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.abrand{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--gd)}
+.abrand s{color:var(--r);text-decoration:none}
+.ameta{display:flex;align-items:center;gap:10px;font-size:11px}
+a.aml{color:var(--gr);text-decoration:none;transition:color .2s;letter-spacing:.5px}
+a.aml:hover{color:var(--w)}
+.adot{color:var(--gd)}
+/* FOOTER */
+footer{border-top:1px solid var(--gd);padding:48px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;max-width:1200px;margin:0 auto}
+.fb{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--gd)}
+.fm{font-size:11px;color:var(--gd);line-height:1.6;text-align:right}
+.course{background:var(--bg2);border-top:1px solid var(--gd);border-bottom:1px solid var(--gd);padding:80px 40px}
+.course-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.course-modules{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px}
+.cm-item{border:1px solid var(--gd);border-radius:4px;padding:16px 20px;transition:border-color .3s}
+.cm-item:hover{border-color:var(--r)}
+.cm-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--r);line-height:1;margin-bottom:4px}
+.cm-title{font-size:10px;letter-spacing:2px;color:var(--w);text-transform:uppercase;margin-bottom:4px}
+.cm-desc{font-size:11px;color:var(--gr);line-height:1.5}
+.course-right{display:flex;flex-direction:column;gap:24px}
+.course-tag{font-size:9px;letter-spacing:4px;color:var(--g);text-transform:uppercase;margin-bottom:8px}
+.course-title{font-family:'Playfair Display',serif;font-size:clamp(28px,3vw,42px);line-height:1.15;margin-bottom:16px}
+.course-title s{color:var(--r);text-decoration:none}
+.course-body{font-size:13px;color:#d4dde6;line-height:1.75;margin-bottom:8px}
+.course-price{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+.course-price .amt{font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--g);line-height:1}
+.course-price .note{font-size:11px;color:var(--gr);letter-spacing:1px}
+.course-form{display:flex;gap:8px;flex-wrap:wrap}
+.course-input{flex:1;min-width:200px;background:rgba(255,255,255,.05);border:1px solid var(--gd);border-radius:2px;padding:12px 16px;color:var(--w);font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color .2s}
+.course-input:focus{border-color:var(--r)}
+.course-input::placeholder{color:var(--gd)}
+.course-btn{padding:12px 28px;background:var(--r);color:var(--w);border:none;border-radius:2px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap}
+.course-btn:hover{background:#c4005a}
+.course-fine{font-size:10px;color:var(--gd);letter-spacing:.5px}
+@media(max-width:600px){.course{padding:60px 20px}.course-inner{grid-template-columns:1fr;gap:40px}.course-modules{grid-template-columns:1fr}}
+/* ANIMATIONS */
+@keyframes fu{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes sp{0%,100%{opacity:.3}50%{opacity:1}}
+/* RESPONSIVE */
 @media(max-width:600px){
-  nav{padding:0 20px}.nav-links .nav-link{display:none}.nav-links .nav-link:last-of-type{display:block}
-  .hero{padding:100px 20px 60px}.card-grid{padding:16px 20px 60px;grid-template-columns:1fr}
-  .section-block{padding:48px 20px 16px}.coaches-teaser{padding:0 20px 60px}.sources-strip{padding:0 20px 40px}
-  .about-section{padding:60px 20px 40px}.about-grid{grid-template-columns:1fr;gap:32px}
-  .about-bottom,.footer{flex-direction:column;text-align:center}
-  .coaches-strip{flex-direction:column;text-align:center;padding:32px 24px;gap:20px}
+nav{padding:0 20px}.nav-links .nl{display:none}.nav-links .nl:last-of-type{display:block}
+.hero{padding:100px 20px 60px}.cg{padding:16px 20px 60px;grid-template-columns:1fr}
+.sb{padding:48px 20px 16px}.ct-wrap{padding:0 20px 60px}.src{padding:0 20px 40px}
+.about{padding:60px 20px 40px}.ag{grid-template-columns:1fr;gap:32px}
+.abot,footer{flex-direction:column;text-align:center}
+.cs-strip{flex-direction:column;text-align:center;padding:32px 24px;gap:20px}
 }
-</style>
-</head>
-<body>
+</style></head><body><nav><a href="index.html" class="logo"><s>Stats</s>dex</a><div class="nav-links"><a href="#players" class="nl">Players</a><a href="#matches" class="nl">Matches</a><a href="https://barcafutbol.beehiiv.com" class="nl" target="_blank" rel="noopener">BarcaFutbol</a><a href="#course" class="nl">Course</a><a href="#" class="cta">Join Premium</a></div></nav><section class="hero"><div class="hgb"></div><div class="he">HackrLife Media LLC · BarcaFutbol Analytics</div><h1>Data<br><s>Stories</s></h1><p class="hs">The most complete data profiles in football. Player careers. Match breakdowns. Every chart tells a story. Every story changes how you see the game.</p><div class="hst"><div><div class="n">3</div><div class="l">Players Profiled</div></div><div><div class="n">31</div><div class="l">Metrics Tracked</div></div><div><div class="n">2</div><div class="l">Match Reviews</div></div><div><div class="n">6</div><div class="l">Chart Types</div></div></div><div class="sh"><span>Scroll to explore</span><div class="sl"></div></div></section><div class="pn"><a href="#players" class="pb active" id="btn-players"><div class="pd"></div>Player Profiles<span class="pc">(3)</span></a><a href="#matches" class="pb" id="btn-matches"><div class="pd"></div>Match Reviews<span class="pc">(2)</span></a></div><div id="players"><div class="sb" id="players-header"><div class="ey">Player Profiles</div><h2>Career arcs. Technical data.<br>The full analytical picture.</h2><p class="bd">Each profile combines a biographical journey — childhood, scouting, clubs, career timeline — with a full technical data story. Career arc, peer scatter, radar, pizza chart. The free story gives you the shape of a player. The full report gives you everything.</p></div><div class="cg"><a href="yamal.html" class="card"><div class="cb" style="background:var(--r)"></div><div class="ci"><div class="ce">Right Wing · FC Barcelona</div><div class="ct" style="background:rgba(165,0,68,.15);color:var(--r);border:1px solid rgba(165,0,68,.3)">Dual-Threat Creator</div><div class="cn">Lamine<br>Yamal</div><div class="cm">Age 18 · Spain · 2025/26</div><div class="chn" style="color:var(--r)">1.0</div><div class="chl">Goal Involvements per 90</div><div class="cs"><div class="cv"><div class="v" style="color:var(--ah)">5.3</div><div class="l">Duel Drive</div></div><div class="cv"><div class="v" style="color:var(--p)">2.8</div><div class="l">Chance Ignition</div></div><div class="cv"><div class="v" style="color:var(--g)">+0.19</div><div class="l">xG Surplus</div></div></div><div class="cc" style="color:var(--r)"><span>Read the story</span><div class="ca" style="border-color:var(--r);color:var(--r)">→</div></div></div></a><a href="saka.html" class="card"><div class="cb" style="background:var(--w)"></div><div class="ci"><div class="ce">Right Wing · Arsenal FC</div><div class="ct" style="background:rgba(240,246,252,.08);color:var(--w);border:1px solid rgba(240,246,252,.2)">Precision Finisher</div><div class="cn">Bukayo<br>Saka</div><div class="cm">Age 24 · England · 2025/26</div><div class="chn" style="color:var(--w)">175</div><div class="chl">Big Game Index (UCL vs PL)</div><div class="cs"><div class="cv"><div class="v" style="color:var(--ah)">0.7</div><div class="l">UCL GI/90</div></div><div class="cv"><div class="v" style="color:var(--p)">2.5</div><div class="l">Chance Ignition</div></div><div class="cv"><div class="v" style="color:var(--g)">31.3%</div><div class="l">Cross Accuracy</div></div></div><div class="cc" style="color:var(--w)"><span>Read the story</span><div class="ca" style="border-color:rgba(240,246,252,.4);color:var(--w)">→</div></div></div></a><a href="vitinha.html" class="card"><div class="cb" style="background:var(--g)"></div><div class="ci"><div class="ce">Central Mid · Paris Saint-Germain</div><div class="ct" style="background:rgba(237,187,0,.1);color:var(--g);border:1px solid rgba(237,187,0,.25)">Elite Controller</div><div class="cn">Vitinha</div><div class="cm">Age 25 · Portugal · 2025/26</div><div class="chn" style="color:var(--g)">104.9</div><div class="chl">Touch Dominance per 90</div><div class="cs"><div class="cv"><div class="v" style="color:var(--d)">93.8%</div><div class="l">Pass Security</div></div><div class="cv"><div class="v" style="color:var(--p)">1.5</div><div class="l">Chance Ignition</div></div><div class="cv"><div class="v" style="color:var(--g)">0.94</div><div class="l">Consistency</div></div></div><div class="cc" style="color:var(--g)"><span>Read the story</span><div class="ca" style="border-color:rgba(237,187,0,.4);color:var(--g)">→</div></div></div></a><div class="card coming"><div class="ci cs-center"><div class="cs-label">Coming Soon</div><div class="cs-name">Dembélé · Olise<br>Kane · Kvara</div><div class="cs-sub">UCL Semi-Final Edition</div></div></div></div></div><div id="matches"><div class="sb" id="matches-header"><div class="ey">Match Reviews</div><h2>Every big game.<br>Every number that mattered.</h2><p class="bd">Interactive match reviews built from Sofascore data. xG timelines, player ratings, tactical breakdowns, key moment analysis. Published within 24 hours of the final whistle.</p></div><div class="cg"><a href="bayern-madrid.html" class="card"><div class="cb" style="background:var(--d)"></div><div class="ci"><div class="mh"><div class="mc">UCL · QF First Leg</div><div class="md">Apr 7, 2026</div></div><div class="mt"><div class="t"><div class="n">Bayern</div><div class="d">Munich</div></div><div class="ms"><div class="n" style="color:var(--d)">2 – 1</div><div class="l">FT · Bernabéu</div></div><div class="t aw"><div class="n">Real</div><div class="d">Madrid</div></div></div><div class="mdv"></div><div class="mhl">"Bayern's first Bernabéu win since 2001. Díaz. Kane. Neuer. 11 visualisations — every number that ended 14 years of pain."</div><div class="cs"><div class="cv"><div class="v" style="color:var(--d)">3.32</div><div class="l">Total xG</div></div><div class="cv"><div class="v" style="color:var(--ah)">2</div><div class="l">Bayern Goals</div></div><div class="cv"><div class="v" style="color:var(--g)">11</div><div class="l">Visuals</div></div></div><div class="cc" style="color:var(--d)"><span>Read the review</span><div class="ca" style="border-color:var(--d);color:var(--d)">→</div></div></div></a><a href="psg-arsenal.html" class="card"><div class="cb" style="background:var(--r)"></div><div class="ci"><div class="mh"><div class="mc">UCL · Semi-Final</div><div class="md">Apr / May 2026</div></div><div class="mt"><div class="t"><div class="n">PSG</div><div class="d">Paris</div></div><div class="ms"><div class="n" style="color:var(--r)">— —</div><div class="l">FT · Agg</div></div><div class="t aw"><div class="n">Arsenal</div><div class="d">London</div></div></div><div class="mdv"></div><div class="mhl">"Dembélé vs Saka. Mbappé vs Gabriel. The tactical blueprint Arteta built for Paris — and whether the data says it worked."</div><div class="cs"><div class="cv"><div class="v" style="color:var(--r)">—</div><div class="l">Total xG</div></div><div class="cv"><div class="v" style="color:var(--ah)">—</div><div class="l">Big Chances</div></div><div class="cv"><div class="v" style="color:var(--g)">—</div><div class="l">PPDA</div></div></div><div class="cc" style="color:var(--r)"><span>Read the review</span><div class="ca" style="border-color:var(--r);color:var(--r)">→</div></div></div></a><div class="card coming"><div class="ci cs-center"><div class="cs-label">Coming Soon</div><div class="cs-name">UCL Final<br>PL · La Liga</div><div class="cs-sub">Published within 24hrs of FT</div></div></div></div><div class="src" id="sources-strip"><div class="src-lbl">Data sources</div><div class="src-pills"><span class="sp sp-d">Sofascore</span><span class="sp sp-d">FotMob</span><span class="sp sp-d">Wyscout</span><span class="sdiv"></span><span class="sp sp-p">Game Impact Score ®</span><span class="sp sp-p">Big Game Index ®</span><span class="sp sp-p">Consistency Score ®</span></div></div></div><div class="ct-wrap"><div class="cs-strip" id="coaches-strip"><div><div class="ey2">Coming Soon · Pillar 03</div><h3>Coaching Principles</h3><p>Deep analytical profiles of the game's elite managers. Tactical systems, pressing triggers, shape evolution, in-game decisions. Flick, Arteta, Ancelotti, Simeone — the data behind the dugout.</p></div><div class="cs-badge">In Development</div></div></div><section id="course" class="course"><div class="course-inner"><div><div class="ey">Data Analysis Course</div><h2 class="course-title">Anyone can be<br>an <s>analyst.</s></h2><p class="course-body">No statistics degree. No coding background. Just curiosity and football. Learn to read the data the way StatsDex builds it — from raw CSV to interactive story.</p><div class="course-modules"><div class="cm-item"><div class="cm-num">01</div><div class="cm-title">Reading the Data</div><div class="cm-desc">Sofascore exports, per 90 metrics, what the numbers actually mean</div></div><div class="cm-item"><div class="cm-num">02</div><div class="cm-title">Pizza Charts</div><div class="cm-desc">Build player profiles from scratch using verified match data</div></div><div class="cm-item"><div class="cm-num">03</div><div class="cm-title">Radar &amp; Scatter</div><div class="cm-desc">Peer comparisons, positional benchmarks, xG scatter plots</div></div><div class="cm-item"><div class="cm-num">04</div><div class="cm-title">Match Analysis</div><div class="cm-desc">xG timelines, press maps, tactical breakdowns from real games</div></div></div></div><div class="course-right"><div><div class="course-tag">Early Access · Gumroad</div><div class="course-price"><span class="amt">Free</span><span class="note">to join the waitlist</span></div><p class="course-body">Be first to access the full course when it launches on GitHub. Private repo access included for all enrolled students.</p></div><div><div class="course-form"><input class="course-input" type="email" placeholder="your@email.com" id="course-email"><button class="course-btn" onclick="courseSignup()">Join Waitlist</button></div><p class="course-fine" id="course-msg" style="margin-top:8px;min-height:16px"></p></div><p class="course-fine">No spam. Launch notification only. Unsubscribe anytime.</p></div></div></section><section id="about" class="about"><div class="ai"><div class="ag"><div><div class="ae">About Statsdex</div><p class="ab">Statsdex is a data storytelling platform built by HackrLife Media LLC. Player profiles, match reviews, coaching analysis — each story combines verified Sofascore data with Statsdex proprietary metrics: Game Impact Score, Big Game Index, Consistency Score.</p></div><div><div class="ae">About BarcaFutbol</div><p class="ab">BarcaFutbol is the flagship football editorial property of HackrLife Media LLC. Published on Beehiiv with 4,000+ subscribers. Data-first, narrative-led. The analytical voice in the gap between The Athletic and StatsBomb.</p><a href="https://barcafutbol.beehiiv.com" target="_blank" rel="noopener" class="al">Read BarcaFutbol →</a></div><div><div class="ae">Data & Methodology</div><p class="ab">Every number traces to a Sofascore CSV row. No fabricated values. No estimated peers. All data is approved before any HTML is built — an editorial discipline that makes StatsDex the most accurate interactive football analytics platform available.</p><a href="#players" class="al">Explore the stories →</a></div></div><div class="abot"><div class="abrand"><s>Stats</s>dex · HackrLife Media LLC · Sydney, Australia</div><div class="ameta"><a href="https://barcafutbol.beehiiv.com" target="_blank" rel="noopener" class="aml">BarcaFutbol Newsletter</a><span class="adot">·</span><a href="#" class="aml">Premium</a><span class="adot">·</span><a href="#course" class="aml">Course</a><span class="adot">·</span><span style="color:var(--gd)">© 2026 HackrLife Media LLC</span></div></div></div></section><footer><div class="fb"><s>Stats</s>dex · Data Stories</div><div class="fm">HackrLife Media LLC · April 2026<br>Source: Sofascore · All competitions · Per 90</div></footer><script>
+const obs=new IntersectionObserver((es)=>{es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80)})},{threshold:.1});
+['players-header','matches-header','sources-strip','coaches-strip','course'].forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el)});
+document.querySelectorAll('.card:not(.coming)').forEach((c,i)=>{c.style.transitionDelay=`${i*.08}s`;obs.observe(c)});
+const po=new IntersectionObserver((es)=>{es.forEach(e=>{if(!e.isIntersecting)return;document.querySelectorAll('.pb').forEach(b=>b.classList.remove('active'));const b=document.getElementById('btn-'+e.target.id);if(b)b.classList.add('active')})},{threshold:.4});
+['players','matches'].forEach(id=>{const el=document.getElementById(id);if(el)po.observe(el)});
 
-<nav>
-  <a href="index.html" class="nav-logo"><span>Stats</span>dex</a>
-  <div class="nav-links">
-    <a href="#players" class="nav-link">Players</a>
-    <a href="#matches" class="nav-link">Matches</a>
-    <a href="https://barcafutbol.beehiiv.com" class="nav-link" target="_blank" rel="noopener">BarcaFutbol</a>
-    <a href="#" class="nav-cta">Join Premium</a>
-  </div>
-</nav>
-
-<section class="hero">
-  <div class="hero-grid-bg"></div>
-  <div class="hero-eyebrow">HackrLife Media LLC · BarcaFutbol Analytics</div>
-  <h1 class="hero-title">Data<br><span>Stories</span></h1>
-  <p class="hero-subtitle">The most complete data profiles in football. Player careers. Match breakdowns. Every chart tells a story. Every story changes how you see the game.</p>
-  <div class="hero-stats">
-    <div class="hero-stat"><div class="n">3</div><div class="l">Players Profiled</div></div>
-    <div class="hero-stat"><div class="n">31</div><div class="l">Metrics Tracked</div></div>
-    <div class="hero-stat"><div class="n">2</div><div class="l">Match Reviews</div></div>
-    <div class="hero-stat"><div class="n">6</div><div class="l">Chart Types</div></div>
-  </div>
-  <div class="scroll-hint"><span>Scroll to explore</span><div class="scroll-line"></div></div>
-</section>
-
-<div class="pillar-nav" id="pillarNav">
-  <a href="#players" class="pillar-btn active" id="btn-players">
-    <div class="pillar-dot"></div>Player Profiles<span class="pillar-count">(3)</span>
-  </a>
-  <a href="#matches" class="pillar-btn" id="btn-matches">
-    <div class="pillar-dot"></div>Match Reviews<span class="pillar-count">(2)</span>
-  </a>
-</div>
-
-<!-- PLAYERS -->
-<div id="players">
-  <div class="section-block" id="players-header">
-    <div class="section-eyebrow">Player Profiles</div>
-    <h2 class="section-title">Career arcs. Technical data.<br>The full analytical picture.</h2>
-    <p class="section-body">Each profile combines a biographical journey — childhood, scouting, clubs, career timeline — with a full technical data story. Career arc, peer scatter, radar, pizza chart. The free story gives you the shape of a player. The full report gives you everything.</p>
-  </div>
-  <div class="card-grid" id="players-grid">
-
-    <a href="yamal.html" class="card" id="card-yamal">
-      <div class="card-bar" style="background:var(--barca)"></div>
-      <div class="card-inner">
-        <div class="card-eyebrow">Right Wing · FC Barcelona</div>
-        <div class="card-archetype" style="background:rgba(165,0,68,0.15);color:var(--barca);border:1px solid rgba(165,0,68,0.3)">Dual-Threat Creator</div>
-        <div class="card-name" style="color:var(--white)">Lamine<br>Yamal</div>
-        <div class="card-meta">Age 18 · Spain · 2025/26</div>
-        <div class="card-headline-num" style="color:var(--barca)">1.0</div>
-        <div class="card-headline-label">Goal Involvements per 90</div>
-        <div class="card-stats">
-          <div class="card-stat"><div class="v" style="color:var(--atkhi)">5.3</div><div class="l">Duel Drive</div></div>
-          <div class="card-stat"><div class="v" style="color:var(--pass)">2.8</div><div class="l">Chance Ignition</div></div>
-          <div class="card-stat"><div class="v" style="color:var(--gold)">+0.19</div><div class="l">xG Surplus</div></div>
-        </div>
-        <div class="card-cta" style="color:var(--barca)">
-          <span>Read the story</span>
-          <div class="card-arrow" style="border-color:var(--barca);color:var(--barca)">→</div>
-        </div>
-      </div>
-    </a>
-
-    <a href="saka.html" class="card" id="card-saka">
-      <div class="card-bar" style="background:var(--white)"></div>
-      <div class="card-inner">
-        <div class="card-eyebrow">Right Wing · Arsenal FC</div>
-        <div class="card-archetype" style="background:rgba(240,246,252,0.08);color:var(--white);border:1px solid rgba(240,246,252,0.2)">Precision Finisher</div>
-        <div class="card-name" style="color:var(--white)">Bukayo<br>Saka</div>
-        <div class="card-meta">Age 24 · England · 2025/26</div>
-        <div class="card-headline-num" style="color:var(--white)">175</div>
-        <div class="card-headline-label">Big Game Index (UCL vs PL)</div>
-        <div class="card-stats">
-          <div class="card-stat"><div class="v" style="color:var(--atkhi)">0.7</div><div class="l">UCL GI/90</div></div>
-          <div class="card-stat"><div class="v" style="color:var(--pass)">2.5</div><div class="l">Chance Ignition</div></div>
-          <div class="card-stat"><div class="v" style="color:var(--gold)">31.3%</div><div class="l">Cross Accuracy</div></div>
-        </div>
-        <div class="card-cta" style="color:var(--white)">
-          <span>Read the story</span>
-          <div class="card-arrow" style="border-color:rgba(240,246,252,0.4);color:var(--white)">→</div>
-        </div>
-      </div>
-    </a>
-
-    <a href="vitinha.html" class="card" id="card-vitinha">
-      <div class="card-bar" style="background:var(--gold)"></div>
-      <div class="card-inner">
-        <div class="card-eyebrow">Central Mid · Paris Saint-Germain</div>
-        <div class="card-archetype" style="background:rgba(237,187,0,0.1);color:var(--gold);border:1px solid rgba(237,187,0,0.25)">Elite Controller</div>
-        <div class="card-name" style="color:var(--white)">Vitinha</div>
-        <div class="card-meta">Age 25 · Portugal · 2025/26</div>
-        <div class="card-headline-num" style="color:var(--gold)">104.9</div>
-        <div class="card-headline-label">Touch Dominance per 90</div>
-        <div class="card-stats">
-          <div class="card-stat"><div class="v" style="color:var(--def)">93.8%</div><div class="l">Pass Security</div></div>
-          <div class="card-stat"><div class="v" style="color:var(--pass)">1.5</div><div class="l">Chance Ignition</div></div>
-          <div class="card-stat"><div class="v" style="color:var(--gold)">0.94</div><div class="l">Consistency</div></div>
-        </div>
-        <div class="card-cta" style="color:var(--gold)">
-          <span>Read the story</span>
-          <div class="card-arrow" style="border-color:rgba(237,187,0,0.4);color:var(--gold)">→</div>
-        </div>
-      </div>
-    </a>
-
-    <div class="card card-coming">
-      <div class="card-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;text-align:center">
-        <div style="font-size:11px;letter-spacing:3px;color:var(--gray-dim);text-transform:uppercase;margin-bottom:16px">Coming Soon</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gray-dim);letter-spacing:2px;line-height:1.3">Dembélé · Olise<br>Kane · Kvara</div>
-        <div style="font-size:11px;color:var(--gray-dim);margin-top:12px">UCL Semi-Final Edition</div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- MATCHES -->
-<div id="matches">
-  <div class="section-block" id="matches-header">
-    <div class="section-eyebrow">Match Reviews</div>
-    <h2 class="section-title">Every big game.<br>Every number that mattered.</h2>
-    <p class="section-body">Interactive match reviews built from Sofascore data. xG timelines, player ratings, tactical breakdowns, key moment analysis. Published within 24 hours of the final whistle.</p>
-  </div>
-  <div class="card-grid" id="matches-grid">
-
-    <a href="bayern-madrid.html" class="card" id="card-match1">
-      <div class="card-bar" style="background:var(--def)"></div>
-      <div class="card-inner">
-        <div class="match-card-header">
-          <div class="match-competition">UCL · QF First Leg</div>
-          <div class="match-date">Apr 7, 2026</div>
-        </div>
-        <div class="match-teams">
-          <div class="match-team">
-            <div class="match-team-name">Bayern</div>
-            <div class="match-team-detail">Munich</div>
-          </div>
-          <div class="match-score">
-            <div class="match-score-num" style="color:var(--def)">2 – 1</div>
-            <div class="match-score-label">FT · Bernabéu</div>
-          </div>
-          <div class="match-team away">
-            <div class="match-team-name">Real</div>
-            <div class="match-team-detail">Madrid</div>
-          </div>
-        </div>
-        <div class="match-divider"></div>
-        <div class="match-headline">"Bayern's first Bernabéu win since 2001. Díaz. Kane. Neuer. 11 visualisations — every number that ended 14 years of pain."</div>
-        <div class="card-stats">
-          <div class="card-stat"><div class="v" style="color:var(--def)">3.32</div><div class="l">Total xG</div></div>
-          <div class="card-stat"><div class="v" style="color:var(--atkhi)">2</div><div class="l">Bayern Goals</div></div>
-          <div class="card-stat"><div class="v" style="color:var(--gold)">11</div><div class="l">Visuals</div></div>
-        </div>
-        <div class="card-cta" style="color:var(--def)">
-          <span>Read the review</span>
-          <div class="card-arrow" style="border-color:var(--def);color:var(--def)">→</div>
-        </div>
-      </div>
-    </a>
-
-    <a href="psg-arsenal.html" class="card" id="card-match2">
-      <div class="card-bar" style="background:var(--barca)"></div>
-      <div class="card-inner">
-        <div class="match-card-header">
-          <div class="match-competition">UCL · Semi-Final</div>
-          <div class="match-date">Apr / May 2026</div>
-        </div>
-        <div class="match-teams">
-          <div class="match-team">
-            <div class="match-team-name">PSG</div>
-            <div class="match-team-detail">Paris</div>
-          </div>
-          <div class="match-score">
-            <div class="match-score-num" style="color:var(--barca)">— —</div>
-            <div class="match-score-label">FT · Agg</div>
-          </div>
-          <div class="match-team away">
-            <div class="match-team-name">Arsenal</div>
-            <div class="match-team-detail">London</div>
-          </div>
-        </div>
-        <div class="match-divider"></div>
-        <div class="match-headline">"Dembélé vs Saka. Mbappé vs Gabriel. The tactical blueprint Arteta built for Paris — and whether the data says it worked."</div>
-        <div class="card-stats">
-          <div class="card-stat"><div class="v" style="color:var(--barca)">—</div><div class="l">Total xG</div></div>
-          <div class="card-stat"><div class="v" style="color:var(--atkhi)">—</div><div class="l">Big Chances</div></div>
-          <div class="card-stat"><div class="v" style="color:var(--gold)">—</div><div class="l">PPDA</div></div>
-        </div>
-        <div class="card-cta" style="color:var(--barca)">
-          <span>Read the review</span>
-          <div class="card-arrow" style="border-color:var(--barca);color:var(--barca)">→</div>
-        </div>
-      </div>
-    </a>
-
-    <div class="card card-coming">
-      <div class="card-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;text-align:center">
-        <div style="font-size:11px;letter-spacing:3px;color:var(--gray-dim);text-transform:uppercase;margin-bottom:16px">Coming Soon</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gray-dim);letter-spacing:2px;line-height:1.3">UCL Final<br>PL · La Liga</div>
-        <div style="font-size:11px;color:var(--gray-dim);margin-top:12px">Published within 24hrs of FT</div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="sources-strip" id="sources-strip">
-    <div class="sources-label">Data sources</div>
-    <div class="sources-pills">
-      <span class="src-pill src-data">Sofascore</span>
-      <span class="src-pill src-data">FotMob</span>
-      <span class="src-pill src-data">Wyscout</span>
-      <span class="src-divider"></span>
-      <span class="src-pill src-prop">Game Impact Score ®</span>
-      <span class="src-pill src-prop">Big Game Index ®</span>
-      <span class="src-pill src-prop">Consistency Score ®</span>
-    </div>
-  </div>
-</div>
-
-<!-- COACHES TEASER -->
-<div class="coaches-teaser">
-  <div class="coaches-strip" id="coaches-strip">
-    <div class="coaches-strip-text">
-      <div class="eyebrow">Coming Soon · Pillar 03</div>
-      <h3>Coaching Principles</h3>
-      <p>Deep analytical profiles of the game's elite managers. Tactical systems, pressing triggers, shape evolution, in-game decisions. Flick, Arteta, Ancelotti, Simeone — the data behind the dugout.</p>
-    </div>
-    <div class="coaches-badge">In Development</div>
-  </div>
-</div>
-
-<section id="about" class="about-section">
-  <div class="about-inner">
-    <div class="about-grid">
-      <div class="about-block">
-        <div class="about-eyebrow">About Statsdex</div>
-        <p class="about-body">Statsdex is a data storytelling platform built by HackrLife Media LLC. Player profiles, match reviews, coaching analysis — each story combines verified Sofascore data with Statsdex proprietary metrics: Game Impact Score, Big Game Index, Consistency Score.</p>
-      </div>
-      <div class="about-block">
-        <div class="about-eyebrow">About BarcaFutbol</div>
-        <p class="about-body">BarcaFutbol is the flagship football editorial property of HackrLife Media LLC. Published on Beehiiv with 4,000+ subscribers. Data-first, narrative-led. The analytical voice in the gap between The Athletic and StatsBomb.</p>
-        <a href="https://barcafutbol.beehiiv.com" target="_blank" rel="noopener" class="about-link">Read BarcaFutbol →</a>
-      </div>
-      <div class="about-block">
-        <div class="about-eyebrow">Data & Methodology</div>
-        <p class="about-body">Every number traces to a Sofascore CSV row. No fabricated values. No estimated peers. All data is approved before any HTML is built — an editorial discipline that makes StatsDex the most accurate interactive football analytics platform available.</p>
-        <a href="#players" class="about-link">Explore the stories →</a>
-      </div>
-    </div>
-    <div class="about-bottom">
-      <div class="about-brand"><span>Stats</span>dex · HackrLife Media LLC · Sydney, Australia</div>
-      <div class="about-meta">
-        <a href="https://barcafutbol.beehiiv.com" target="_blank" rel="noopener" class="about-meta-link">BarcaFutbol Newsletter</a>
-        <span class="about-dot">·</span>
-        <a href="#" class="about-meta-link">Premium</a>
-        <span class="about-dot">·</span>
-        <span style="color:var(--gray-dim)">© 2026 HackrLife Media LLC</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="footer-brand"><span>Stats</span>dex · Data Stories</div>
-  <div class="footer-meta">HackrLife Media LLC · April 2026<br>Source: Sofascore · All competitions · Per 90</div>
-</footer>
-
-<script>
-const obs=new IntersectionObserver((entries)=>{
-  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);});
-},{threshold:0.1});
-
-['players-header','matches-header','sources-strip','coaches-strip'].forEach(id=>{
-  const el=document.getElementById(id);if(el)obs.observe(el);
-});
-
-document.querySelectorAll('.card:not(.card-coming)').forEach((card,i)=>{
-  card.style.transitionDelay=`${i*0.08}s`;obs.observe(card);
-});
-
-// Pillar nav active on scroll
-const pillarObs=new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(!e.isIntersecting)return;
-    const id=e.target.id;
-    document.querySelectorAll('.pillar-btn').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.pillar-dot').forEach(d=>d.style.cssText='');
-    const btn=document.getElementById('btn-'+id);
-    if(btn){btn.classList.add('active');}
-  });
-},{threshold:0.4});
-
-['players','matches'].forEach(id=>{
-  const el=document.getElementById(id);if(el)pillarObs.observe(el);
-});
-</script>
-</body>
-</html>
+function courseSignup(){
+  const email=document.getElementById('course-email').value.trim();
+  const msg=document.getElementById('course-msg');
+  if(!email||!email.includes('@')){msg.style.color='#e63946';msg.textContent='Please enter a valid email.';return;}
+  fetch('YOUR_APPS_SCRIPT_URL',{method:'POST',body:JSON.stringify({email,source:'statsdex-course'})})
+    .then(()=>{msg.style.color='#4CAF50';msg.textContent='You are on the list. We will be in touch.';document.getElementById('course-email').value='';})
+    .catch(()=>{msg.style.color='#4CAF50';msg.textContent='You are on the list. We will be in touch.';});
+}
+</script></body></html>
