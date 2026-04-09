@@ -3,52 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BarcaFutbol Data Stories</title>
+<title>StatsDex — BarcaFutbol Data Stories</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#0d1117;--bg2:#0d1b2a;--bg3:#161b22;
-  --barca:#A50044;--gold:#EDBB00;--white:#f0f6fc;
-  --gray:#8b949e;--gray-dim:#3d444d;
-  --pass:#4CAF50;--def:#2196F3;--atkhi:#ffd60a;--atklo:#e63946;
-}
+:root{--bg:#0d1117;--bg2:#0d1b2a;--bg3:#161b22;--barca:#A50044;--gold:#EDBB00;--white:#f0f6fc;--gray:#8b949e;--gray-dim:#3d444d;--pass:#4CAF50;--def:#2196F3;--atkhi:#ffd60a;--atklo:#e63946}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--white);font-family:'DM Mono',monospace;overflow-x:hidden;cursor:default}
-
-/* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;background:rgba(13,17,23,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(165,0,68,0.2)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:60px;display:flex;align-items:center;justify-content:space-between;background:rgba(13,17,23,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(165,0,68,0.2)}
 .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--white);text-decoration:none}
 .nav-logo span{color:var(--barca)}
-.nav-links{display:flex;align-items:center;gap:8px}
-.nav-link{font-size:11px;letter-spacing:1.5px;color:var(--gray);text-decoration:none;text-transform:uppercase;padding:6px 12px;transition:color .2s;border-radius:4px}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-link{font-size:11px;letter-spacing:1.5px;color:var(--gray);text-decoration:none;text-transform:uppercase;padding:6px 12px;transition:all .2s;border-radius:2px}
 .nav-link:hover{color:var(--white);background:rgba(255,255,255,0.05)}
 .nav-cta{font-size:11px;letter-spacing:1.5px;padding:7px 18px;border:1px solid var(--barca);color:var(--barca);text-decoration:none;text-transform:uppercase;transition:all .2s;border-radius:2px;margin-left:8px}
 .nav-cta:hover{background:var(--barca);color:var(--white)}
-
-/* ── HERO ── */
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 40px 80px;position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(165,0,68,0.08) 0%,transparent 70%);pointer-events:none}
 .hero-grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(165,0,68,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(165,0,68,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
 .hero-eyebrow{font-size:11px;letter-spacing:4px;color:var(--barca);text-transform:uppercase;margin-bottom:24px;opacity:0;animation:fadeUp .8s .2s forwards}
 .hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(56px,10vw,120px);letter-spacing:4px;line-height:0.95;color:var(--white);margin-bottom:20px;opacity:0;animation:fadeUp .8s .4s forwards}
 .hero-title span{color:var(--barca)}
-.hero-subtitle{font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,22px);color:var(--gray);max-width:600px;line-height:1.6;margin-bottom:48px;opacity:0;animation:fadeUp .8s .6s forwards;font-style:italic}
+.hero-subtitle{font-family:'Playfair Display',serif;font-size:clamp(16px,2vw,22px);color:#d4dde6;max-width:600px;line-height:1.6;margin-bottom:48px;opacity:0;animation:fadeUp .8s .6s forwards;font-style:italic}
 .hero-stats{display:flex;gap:48px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .8s forwards}
 .hero-stat .n{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--gold);line-height:1}
-.hero-stat .l{font-size:10px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-top:4px}
+.hero-stat .l{font-size:10px;letter-spacing:2px;color:#d4dde6;text-transform:uppercase;margin-top:4px}
 .scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp .8s 1.2s forwards}
 .scroll-hint span{font-size:10px;letter-spacing:3px;color:var(--gray);text-transform:uppercase}
 .scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--barca),transparent);animation:scrollPulse 2s infinite}
-
-/* ── SECTION HEADER ── */
-.section-header{padding:80px 40px 20px;max-width:900px;margin:0 auto;opacity:0;transform:translateY(30px);transition:all .8s cubic-bezier(.16,1,.3,1)}
-.section-header.visible{opacity:1;transform:translateY(0)}
-.section-eyebrow{font-size:10px;letter-spacing:3px;color:var(--barca);text-transform:uppercase;margin-bottom:12px}
-.section-title{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,44px);color:var(--white);line-height:1.2;margin-bottom:12px}
-.section-body{font-size:14px;color:var(--gray);line-height:1.7;max-width:620px}
-.sources-strip{margin-top:28px;opacity:0;transform:translateY(20px);transition:all .8s .35s cubic-bezier(.16,1,.3,1)}
+.pillar-nav{position:sticky;top:60px;z-index:90;background:rgba(13,17,23,0.98);backdrop-filter:blur(16px);border-bottom:1px solid var(--gray-dim);display:flex}
+.pillar-btn{flex:1;height:52px;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gray);text-decoration:none;border-bottom:2px solid transparent;transition:all .3s}
+.pillar-btn:hover{color:var(--white)}
+.pillar-btn.active{color:var(--white);border-bottom-color:var(--barca)}
+.pillar-dot{width:6px;height:6px;border-radius:50%;background:var(--gray-dim);transition:all .3s;flex-shrink:0}
+.pillar-btn.active .pillar-dot{background:var(--barca);box-shadow:0 0 8px rgba(165,0,68,.6)}
+.pillar-count{font-size:9px;color:var(--gray-dim)}
+.section-block{padding:72px 40px 24px;max-width:1200px;margin:0 auto;opacity:0;transform:translateY(24px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.section-block.visible{opacity:1;transform:translateY(0)}
+.section-eyebrow{font-size:9px;letter-spacing:4px;color:var(--barca);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.section-eyebrow::before{content:'';width:20px;height:1px;background:var(--barca)}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(24px,3.5vw,40px);color:var(--white);line-height:1.15;margin-bottom:10px}
+.section-body{font-size:13px;color:#d4dde6;line-height:1.75;max-width:560px}
+.card-grid{padding:24px 40px 80px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px}
+.card{background:var(--bg2);border:1px solid var(--gray-dim);border-radius:8px;overflow:hidden;text-decoration:none;display:block;transition:all .4s cubic-bezier(.16,1,.3,1);opacity:0;transform:translateY(40px);position:relative}
+.card.visible{opacity:1;transform:translateY(0)}
+.card:hover{border-color:var(--barca);transform:translateY(-6px)}
+.card:hover .card-bar{width:100%}
+.card-bar{position:absolute;top:0;left:0;height:3px;width:0;transition:width .4s cubic-bezier(.16,1,.3,1)}
+.card-inner{padding:32px 28px}
+.card-eyebrow{font-size:10px;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-eyebrow::before{content:'';width:20px;height:1px;background:var(--barca)}
+.card-archetype{display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;margin-bottom:16px}
+.card-name{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:2px;line-height:1;margin-bottom:4px}
+.card-meta{font-size:11px;color:#d4dde6;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:28px}
+.card-headline-num{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;margin-bottom:4px}
+.card-headline-label{font-size:10px;letter-spacing:2px;color:#d4dde6;text-transform:uppercase;margin-bottom:28px}
+.card-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--gray-dim);padding-top:20px;margin-bottom:28px}
+.card-stat{text-align:center;padding:0 8px}
+.card-stat:not(:last-child){border-right:1px solid var(--gray-dim)}
+.card-stat .v{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;margin-bottom:2px}
+.card-stat .l{font-size:9px;letter-spacing:1.5px;color:#d4dde6;text-transform:uppercase}
+.card-cta{display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 0 0;border-top:1px solid var(--gray-dim)}
+.card-arrow{width:28px;height:28px;border:1px solid;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .3s}
+.card:hover .card-arrow{transform:translateX(4px)}
+.match-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.match-competition{font-size:9px;letter-spacing:3px;color:var(--barca);text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.match-competition::before{content:'';width:16px;height:1px;background:var(--barca)}
+.match-date{font-size:10px;color:var(--gray-dim)}
+.match-teams{display:flex;align-items:center;margin-bottom:8px}
+.match-team{flex:1}
+.match-team-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;line-height:1;color:var(--white)}
+.match-team-detail{font-size:9px;letter-spacing:1.5px;color:var(--gray);text-transform:uppercase;margin-top:2px}
+.match-score{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 16px;min-width:80px}
+.match-score-num{font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1;letter-spacing:2px}
+.match-score-label{font-size:8px;letter-spacing:2px;color:var(--gray-dim);text-transform:uppercase;margin-top:2px}
+.match-team.away{text-align:right}
+.match-divider{height:1px;background:var(--gray-dim);margin:20px 0}
+.match-headline{font-family:'Playfair Display',serif;font-size:15px;color:#d4dde6;line-height:1.5;margin-bottom:20px;font-style:italic}
+.card-coming{opacity:0.35;cursor:default;pointer-events:none}
+.card-coming:hover{transform:none!important;border-color:var(--gray-dim)!important}
+.card-coming .card-bar{display:none}
+.coaches-teaser{padding:0 40px 80px;max-width:1200px;margin:0 auto}
+.coaches-strip{border:1px solid var(--gray-dim);border-radius:8px;padding:48px;display:flex;align-items:center;justify-content:space-between;gap:40px;opacity:0;transform:translateY(20px);transition:all .8s;background:var(--bg2)}
+.coaches-strip.visible{opacity:1;transform:translateY(0)}
+.coaches-strip-text .eyebrow{font-size:9px;letter-spacing:4px;color:var(--gray-dim);text-transform:uppercase;margin-bottom:10px}
+.coaches-strip-text h3{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:1px;color:var(--gray-dim);margin-bottom:8px}
+.coaches-strip-text p{font-size:13px;color:var(--gray-dim);line-height:1.7;max-width:480px}
+.coaches-badge{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:3px;color:var(--gray-dim);border:1px solid var(--gray-dim);padding:8px 20px;border-radius:2px;white-space:nowrap;flex-shrink:0}
+.sources-strip{padding:0 40px 48px;max-width:1200px;margin:0 auto;opacity:0;transform:translateY(16px);transition:all .8s .3s}
 .sources-strip.visible{opacity:1;transform:translateY(0)}
 .sources-label{font-size:9px;letter-spacing:3px;color:var(--gray-dim);text-transform:uppercase;margin-bottom:10px}
 .sources-pills{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -56,80 +99,34 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:60px;d
 .src-data{background:rgba(33,150,243,0.08);color:var(--def);border:1px solid rgba(33,150,243,0.2)}
 .src-prop{background:rgba(165,0,68,0.08);color:#e07090;border:1px solid rgba(165,0,68,0.2)}
 .src-divider{width:1px;height:16px;background:var(--gray-dim);margin:0 4px}
-
-/* ── PLAYER GRID ── */
-.player-grid{padding:40px 40px 120px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px}
-
-/* ── PLAYER CARD ── */
-.player-card{background:var(--bg2);border:1px solid var(--gray-dim);border-radius:8px;overflow:hidden;text-decoration:none;display:block;transition:all .4s cubic-bezier(.16,1,.3,1);opacity:0;transform:translateY(40px);position:relative}
-.player-card.visible{opacity:1;transform:translateY(0)}
-.player-card:hover{border-color:var(--barca);transform:translateY(-6px)}
-.player-card:hover .card-bar{width:100%}
-.card-bar{position:absolute;top:0;left:0;height:3px;width:0;transition:width .4s cubic-bezier(.16,1,.3,1)}
-.card-inner{padding:32px 28px}
-.card-eyebrow{font-size:10px;letter-spacing:3px;color:var(--gray);text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.card-eyebrow::before{content:'';width:20px;height:1px;background:var(--barca)}
-.card-name{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:2px;line-height:1;margin-bottom:4px}
-.card-meta{font-size:11px;color:var(--gray);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:28px}
-.card-headline-num{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;margin-bottom:4px}
-.card-headline-label{font-size:10px;letter-spacing:2px;color:var(--gray);text-transform:uppercase;margin-bottom:28px}
-.card-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--gray-dim);padding-top:20px;margin-bottom:28px}
-.card-stat{text-align:center;padding:0 8px}
-.card-stat:not(:last-child){border-right:1px solid var(--gray-dim)}
-.card-stat .v{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1;margin-bottom:2px}
-.card-stat .l{font-size:9px;letter-spacing:1.5px;color:var(--gray);text-transform:uppercase}
-.card-cta{display:flex;align-items:center;justify-content:space-between;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:12px 0 0;border-top:1px solid var(--gray-dim)}
-.card-cta-text{}
-.card-arrow{width:28px;height:28px;border:1px solid;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .3s}
-.player-card:hover .card-arrow{transform:translateX(4px)}
-.card-archetype{display:inline-block;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;margin-bottom:16px}
-
-/* ── COMING SOON CARD ── */
-.card-coming{opacity:0.4;cursor:default;pointer-events:none}
-.card-coming:hover{transform:none;border-color:var(--gray-dim)}
-
-/* ── ABOUT ── */
-.about-section{background:var(--bg2);border-top:1px solid var(--border);padding:80px 40px 60px}
+.about-section{background:var(--bg2);border-top:1px solid var(--gray-dim);padding:80px 40px 60px}
 .about-inner{max-width:1200px;margin:0 auto}
 .about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:48px;margin-bottom:56px}
-.about-block{}
 .about-eyebrow{font-size:10px;letter-spacing:3px;color:var(--barca);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .about-eyebrow::before{content:'';width:20px;height:1px;background:var(--barca)}
-.about-body{font-size:13px;color:var(--gray);line-height:1.75;margin-bottom:14px}
+.about-body{font-size:13px;color:#d4dde6;line-height:1.75;margin-bottom:14px}
 .about-link{font-size:11px;letter-spacing:1.5px;color:var(--white);text-decoration:none;text-transform:uppercase;border-bottom:1px solid var(--gray-dim);padding-bottom:2px;transition:border-color .2s}
 .about-link:hover{border-color:var(--barca);color:var(--barca)}
-.about-bottom{border-top:1px solid var(--border);padding-top:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.about-bottom{border-top:1px solid var(--gray-dim);padding-top:28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
 .about-brand{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--gray-dim)}
 .about-brand span{color:var(--barca)}
 .about-meta{display:flex;align-items:center;gap:10px;font-size:11px}
 .about-meta-link{color:var(--gray);text-decoration:none;transition:color .2s;letter-spacing:.5px}
 .about-meta-link:hover{color:var(--white)}
 .about-dot{color:var(--gray-dim)}
-
-/* ── FOOTER ── */
 footer{border-top:1px solid var(--gray-dim);padding:48px 40px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;max-width:1200px;margin:0 auto}
 .footer-brand{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--gray-dim)}
 .footer-brand span{color:var(--barca)}
 .footer-meta{font-size:11px;color:var(--gray-dim);line-height:1.6;text-align:right}
-
-/* ── ANIMATIONS ── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes scrollPulse{0%,100%{opacity:.3}50%{opacity:1}}
-
-/* ── RESPONSIVE ── */
 @media(max-width:600px){
-  nav{padding:0 20px}
-  .nav-links{gap:4px}
-  .nav-link{display:none}
-  .nav-link:last-of-type{display:block}
-  .hero{padding:100px 20px 60px}
-  .player-grid{padding:20px 20px 80px;grid-template-columns:1fr}
-  .section-header{padding:60px 20px 20px}
-  .about-section{padding:60px 20px 40px}
-  .about-grid{grid-template-columns:1fr;gap:32px}
-  .about-bottom{flex-direction:column;text-align:center}
-  footer{padding:32px 20px;flex-direction:column;text-align:center}
-  .footer-meta{text-align:center}
+  nav{padding:0 20px}.nav-links .nav-link{display:none}.nav-links .nav-link:last-of-type{display:block}
+  .hero{padding:100px 20px 60px}.card-grid{padding:16px 20px 60px;grid-template-columns:1fr}
+  .section-block{padding:48px 20px 16px}.coaches-teaser{padding:0 20px 60px}.sources-strip{padding:0 20px 40px}
+  .about-section{padding:60px 20px 40px}.about-grid{grid-template-columns:1fr;gap:32px}
+  .about-bottom,.footer{flex-direction:column;text-align:center}
+  .coaches-strip{flex-direction:column;text-align:center;padding:32px 24px;gap:20px}
 }
 </style>
 </head>
@@ -138,9 +135,9 @@ footer{border-top:1px solid var(--gray-dim);padding:48px 40px;display:flex;justi
 <nav>
   <a href="index.html" class="nav-logo"><span>Stats</span>dex</a>
   <div class="nav-links">
-    <a href="index.html" class="nav-link">Home</a>
+    <a href="#players" class="nav-link">Players</a>
+    <a href="#matches" class="nav-link">Matches</a>
     <a href="https://barcafutbol.beehiiv.com" class="nav-link" target="_blank" rel="noopener">BarcaFutbol</a>
-    <a href="#about" class="nav-link">About</a>
     <a href="#" class="nav-cta">Join Premium</a>
   </div>
 </nav>
@@ -149,28 +146,203 @@ footer{border-top:1px solid var(--gray-dim);padding:48px 40px;display:flex;justi
   <div class="hero-grid-bg"></div>
   <div class="hero-eyebrow">HackrLife Media LLC · BarcaFutbol Analytics</div>
   <h1 class="hero-title">Data<br><span>Stories</span></h1>
-  <p class="hero-subtitle">The most complete data profiles in football. Every chart tells a story. Every story changes how you see the game.</p>
+  <p class="hero-subtitle">The most complete data profiles in football. Player careers. Match breakdowns. Every chart tells a story. Every story changes how you see the game.</p>
   <div class="hero-stats">
-    <div class="hero-stat"><div class="n">42</div><div class="l">Chart types</div></div>
-    <div class="hero-stat"><div class="n">31</div><div class="l">Metrics tracked</div></div>
-    <div class="hero-stat"><div class="n">3</div><div class="l">Players profiled</div></div>
+    <div class="hero-stat"><div class="n">3</div><div class="l">Players Profiled</div></div>
+    <div class="hero-stat"><div class="n">31</div><div class="l">Metrics Tracked</div></div>
+    <div class="hero-stat"><div class="n">2</div><div class="l">Match Reviews</div></div>
+    <div class="hero-stat"><div class="n">6</div><div class="l">Chart Types</div></div>
   </div>
-  <div class="scroll-hint">
-    <span>Scroll to explore</span>
-    <div class="scroll-line"></div>
-  </div>
+  <div class="scroll-hint"><span>Scroll to explore</span><div class="scroll-line"></div></div>
 </section>
 
-<div class="section-header" id="library-header">
-  <div class="section-eyebrow">The Library</div>
-  <h2 class="section-title">Every player. Every number.<br>Every story that matters.</h2>
-  <p class="section-body">Each profile is a scroll-driven data story drawn from Wyscout, FotMob and Sofascore — three of the most trusted sources in the game, balanced and cross-referenced for accuracy. Alongside established metrics like xG and xA, we publish our own proprietary analytics — Game Impact Score, Big Game Index, Consistency Score — designed to surface what the standard numbers miss. The free story gives you the shape of a player. The full report gives you everything.</p>
-  <div class="sources-strip">
+<div class="pillar-nav" id="pillarNav">
+  <a href="#players" class="pillar-btn active" id="btn-players">
+    <div class="pillar-dot"></div>Player Profiles<span class="pillar-count">(3)</span>
+  </a>
+  <a href="#matches" class="pillar-btn" id="btn-matches">
+    <div class="pillar-dot"></div>Match Reviews<span class="pillar-count">(2)</span>
+  </a>
+</div>
+
+<!-- PLAYERS -->
+<div id="players">
+  <div class="section-block" id="players-header">
+    <div class="section-eyebrow">Player Profiles</div>
+    <h2 class="section-title">Career arcs. Technical data.<br>The full analytical picture.</h2>
+    <p class="section-body">Each profile combines a biographical journey — childhood, scouting, clubs, career timeline — with a full technical data story. Career arc, peer scatter, radar, pizza chart. The free story gives you the shape of a player. The full report gives you everything.</p>
+  </div>
+  <div class="card-grid" id="players-grid">
+
+    <a href="yamal-hub.html" class="card" id="card-yamal">
+      <div class="card-bar" style="background:var(--barca)"></div>
+      <div class="card-inner">
+        <div class="card-eyebrow">Right Wing · FC Barcelona</div>
+        <div class="card-archetype" style="background:rgba(165,0,68,0.15);color:var(--barca);border:1px solid rgba(165,0,68,0.3)">Dual-Threat Creator</div>
+        <div class="card-name" style="color:var(--white)">Lamine<br>Yamal</div>
+        <div class="card-meta">Age 18 · Spain · 2025/26</div>
+        <div class="card-headline-num" style="color:var(--barca)">1.0</div>
+        <div class="card-headline-label">Goal Involvements per 90</div>
+        <div class="card-stats">
+          <div class="card-stat"><div class="v" style="color:var(--atkhi)">5.3</div><div class="l">Duel Drive</div></div>
+          <div class="card-stat"><div class="v" style="color:var(--pass)">2.8</div><div class="l">Chance Ignition</div></div>
+          <div class="card-stat"><div class="v" style="color:var(--gold)">+0.19</div><div class="l">xG Surplus</div></div>
+        </div>
+        <div class="card-cta" style="color:var(--barca)">
+          <span>Read the story</span>
+          <div class="card-arrow" style="border-color:var(--barca);color:var(--barca)">→</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="saka.html" class="card" id="card-saka">
+      <div class="card-bar" style="background:var(--white)"></div>
+      <div class="card-inner">
+        <div class="card-eyebrow">Right Wing · Arsenal FC</div>
+        <div class="card-archetype" style="background:rgba(240,246,252,0.08);color:var(--white);border:1px solid rgba(240,246,252,0.2)">Precision Finisher</div>
+        <div class="card-name" style="color:var(--white)">Bukayo<br>Saka</div>
+        <div class="card-meta">Age 24 · England · 2025/26</div>
+        <div class="card-headline-num" style="color:var(--white)">175</div>
+        <div class="card-headline-label">Big Game Index (UCL vs PL)</div>
+        <div class="card-stats">
+          <div class="card-stat"><div class="v" style="color:var(--atkhi)">0.7</div><div class="l">UCL GI/90</div></div>
+          <div class="card-stat"><div class="v" style="color:var(--pass)">2.5</div><div class="l">Chance Ignition</div></div>
+          <div class="card-stat"><div class="v" style="color:var(--gold)">31.3%</div><div class="l">Cross Accuracy</div></div>
+        </div>
+        <div class="card-cta" style="color:var(--white)">
+          <span>Read the story</span>
+          <div class="card-arrow" style="border-color:rgba(240,246,252,0.4);color:var(--white)">→</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="vitinha.html" class="card" id="card-vitinha">
+      <div class="card-bar" style="background:var(--gold)"></div>
+      <div class="card-inner">
+        <div class="card-eyebrow">Central Mid · Paris Saint-Germain</div>
+        <div class="card-archetype" style="background:rgba(237,187,0,0.1);color:var(--gold);border:1px solid rgba(237,187,0,0.25)">Elite Controller</div>
+        <div class="card-name" style="color:var(--white)">Vitinha</div>
+        <div class="card-meta">Age 25 · Portugal · 2025/26</div>
+        <div class="card-headline-num" style="color:var(--gold)">104.9</div>
+        <div class="card-headline-label">Touch Dominance per 90</div>
+        <div class="card-stats">
+          <div class="card-stat"><div class="v" style="color:var(--def)">93.8%</div><div class="l">Pass Security</div></div>
+          <div class="card-stat"><div class="v" style="color:var(--pass)">1.5</div><div class="l">Chance Ignition</div></div>
+          <div class="card-stat"><div class="v" style="color:var(--gold)">0.94</div><div class="l">Consistency</div></div>
+        </div>
+        <div class="card-cta" style="color:var(--gold)">
+          <span>Read the story</span>
+          <div class="card-arrow" style="border-color:rgba(237,187,0,0.4);color:var(--gold)">→</div>
+        </div>
+      </div>
+    </a>
+
+    <div class="card card-coming">
+      <div class="card-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;text-align:center">
+        <div style="font-size:11px;letter-spacing:3px;color:var(--gray-dim);text-transform:uppercase;margin-bottom:16px">Coming Soon</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gray-dim);letter-spacing:2px;line-height:1.3">Dembélé · Olise<br>Kane · Kvara</div>
+        <div style="font-size:11px;color:var(--gray-dim);margin-top:12px">UCL Semi-Final Edition</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MATCHES -->
+<div id="matches">
+  <div class="section-block" id="matches-header">
+    <div class="section-eyebrow">Match Reviews</div>
+    <h2 class="section-title">Every big game.<br>Every number that mattered.</h2>
+    <p class="section-body">Interactive match reviews built from Sofascore data. xG timelines, player ratings, tactical breakdowns, key moment analysis. Published within 24 hours of the final whistle.</p>
+  </div>
+  <div class="card-grid" id="matches-grid">
+
+    <a href="bayern-madrid.html" class="card" id="card-match1">
+      <div class="card-bar" style="background:var(--def)"></div>
+      <div class="card-inner">
+        <div class="match-card-header">
+          <div class="match-competition">UCL · Semi-Final</div>
+          <div class="match-date">Apr 2026</div>
+        </div>
+        <div class="match-teams">
+          <div class="match-team">
+            <div class="match-team-name">Bayern</div>
+            <div class="match-team-detail">Munich</div>
+          </div>
+          <div class="match-score">
+            <div class="match-score-num" style="color:var(--def)">— —</div>
+            <div class="match-score-label">FT · Agg</div>
+          </div>
+          <div class="match-team away">
+            <div class="match-team-name">Real</div>
+            <div class="match-team-detail">Madrid</div>
+          </div>
+        </div>
+        <div class="match-divider"></div>
+        <div class="match-headline">"The xG told one story. The scoreboard told another. Kane vs Mbappé — Europe's most expensive 90 minutes dissected."</div>
+        <div class="card-stats">
+          <div class="card-stat"><div class="v" style="color:var(--def)">—</div><div class="l">Total xG</div></div>
+          <div class="card-stat"><div class="v" style="color:var(--atkhi)">—</div><div class="l">Big Chances</div></div>
+          <div class="card-stat"><div class="v" style="color:var(--gold)">—</div><div class="l">PPDA</div></div>
+        </div>
+        <div class="card-cta" style="color:var(--def)">
+          <span>Read the review</span>
+          <div class="card-arrow" style="border-color:var(--def);color:var(--def)">→</div>
+        </div>
+      </div>
+    </a>
+
+    <a href="psg-arsenal.html" class="card" id="card-match2">
+      <div class="card-bar" style="background:var(--barca)"></div>
+      <div class="card-inner">
+        <div class="match-card-header">
+          <div class="match-competition">UCL · Semi-Final</div>
+          <div class="match-date">Apr / May 2026</div>
+        </div>
+        <div class="match-teams">
+          <div class="match-team">
+            <div class="match-team-name">PSG</div>
+            <div class="match-team-detail">Paris</div>
+          </div>
+          <div class="match-score">
+            <div class="match-score-num" style="color:var(--barca)">— —</div>
+            <div class="match-score-label">FT · Agg</div>
+          </div>
+          <div class="match-team away">
+            <div class="match-team-name">Arsenal</div>
+            <div class="match-team-detail">London</div>
+          </div>
+        </div>
+        <div class="match-divider"></div>
+        <div class="match-headline">"Dembélé vs Saka. Mbappé vs Gabriel. The tactical blueprint Arteta built for Paris — and whether the data says it worked."</div>
+        <div class="card-stats">
+          <div class="card-stat"><div class="v" style="color:var(--barca)">—</div><div class="l">Total xG</div></div>
+          <div class="card-stat"><div class="v" style="color:var(--atkhi)">—</div><div class="l">Big Chances</div></div>
+          <div class="card-stat"><div class="v" style="color:var(--gold)">—</div><div class="l">PPDA</div></div>
+        </div>
+        <div class="card-cta" style="color:var(--barca)">
+          <span>Read the review</span>
+          <div class="card-arrow" style="border-color:var(--barca);color:var(--barca)">→</div>
+        </div>
+      </div>
+    </a>
+
+    <div class="card card-coming">
+      <div class="card-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;text-align:center">
+        <div style="font-size:11px;letter-spacing:3px;color:var(--gray-dim);text-transform:uppercase;margin-bottom:16px">Coming Soon</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gray-dim);letter-spacing:2px;line-height:1.3">UCL Final<br>PL · La Liga</div>
+        <div style="font-size:11px;color:var(--gray-dim);margin-top:12px">Published within 24hrs of FT</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sources-strip" id="sources-strip">
     <div class="sources-label">Data sources</div>
     <div class="sources-pills">
-      <span class="src-pill src-data">Wyscout</span>
-      <span class="src-pill src-data">FotMob</span>
       <span class="src-pill src-data">Sofascore</span>
+      <span class="src-pill src-data">FotMob</span>
+      <span class="src-pill src-data">Wyscout</span>
       <span class="src-divider"></span>
       <span class="src-pill src-prop">Game Impact Score ®</span>
       <span class="src-pill src-prop">Big Game Index ®</span>
@@ -179,83 +351,16 @@ footer{border-top:1px solid var(--gray-dim);padding:48px 40px;display:flex;justi
   </div>
 </div>
 
-<div class="player-grid">
-
-  <!-- YAMAL -->
-  <a href="yamal.html" class="player-card" id="card-yamal">
-    <div class="card-bar" style="background:var(--barca)"></div>
-    <div class="card-inner">
-      <div class="card-eyebrow">Right Wing · FC Barcelona</div>
-      <div class="card-archetype" style="background:rgba(165,0,68,0.15);color:var(--barca);border:1px solid rgba(165,0,68,0.3)">Dual-Threat Creator</div>
-      <div class="card-name" style="color:var(--white)">Lamine<br>Yamal</div>
-      <div class="card-meta">Age 18 · Spain · 2025/26</div>
-      <div class="card-headline-num" style="color:var(--barca)">1.0</div>
-      <div class="card-headline-label">Goal Involvements per 90</div>
-      <div class="card-stats">
-        <div class="card-stat"><div class="v" style="color:var(--atkhi)">5.3</div><div class="l">Duel Drive</div></div>
-        <div class="card-stat"><div class="v" style="color:var(--pass)">2.8</div><div class="l">Chance Ignition</div></div>
-        <div class="card-stat"><div class="v" style="color:var(--gold)">+0.19</div><div class="l">xG Surplus</div></div>
-      </div>
-      <div class="card-cta" style="color:var(--barca)">
-        <span class="card-cta-text">Read the story</span>
-        <div class="card-arrow" style="border-color:var(--barca);color:var(--barca)">→</div>
-      </div>
+<!-- COACHES TEASER -->
+<div class="coaches-teaser">
+  <div class="coaches-strip" id="coaches-strip">
+    <div class="coaches-strip-text">
+      <div class="eyebrow">Coming Soon · Pillar 03</div>
+      <h3>Coaching Principles</h3>
+      <p>Deep analytical profiles of the game's elite managers. Tactical systems, pressing triggers, shape evolution, in-game decisions. Flick, Arteta, Ancelotti, Simeone — the data behind the dugout.</p>
     </div>
-  </a>
-
-  <!-- SAKA -->
-  <a href="saka.html" class="player-card" id="card-saka">
-    <div class="card-bar" style="background:var(--white)"></div>
-    <div class="card-inner">
-      <div class="card-eyebrow">Right Wing · Arsenal FC</div>
-      <div class="card-archetype" style="background:rgba(240,246,252,0.08);color:var(--white);border:1px solid rgba(240,246,252,0.2)">Precision Finisher</div>
-      <div class="card-name" style="color:var(--white)">Bukayo<br>Saka</div>
-      <div class="card-meta">Age 24 · England · 2025/26</div>
-      <div class="card-headline-num" style="color:var(--white)">175</div>
-      <div class="card-headline-label">Big Game Index (UCL vs PL)</div>
-      <div class="card-stats">
-        <div class="card-stat"><div class="v" style="color:var(--atkhi)">0.7</div><div class="l">UCL GI/90</div></div>
-        <div class="card-stat"><div class="v" style="color:var(--pass)">2.5</div><div class="l">Chance Ignition</div></div>
-        <div class="card-stat"><div class="v" style="color:var(--gold)">31.3%</div><div class="l">Cross Accuracy</div></div>
-      </div>
-      <div class="card-cta" style="color:var(--white)">
-        <span class="card-cta-text">Read the story</span>
-        <div class="card-arrow" style="border-color:rgba(240,246,252,0.4);color:var(--white)">→</div>
-      </div>
-    </div>
-  </a>
-
-  <!-- VITINHA -->
-  <a href="vitinha.html" class="player-card" id="card-vitinha">
-    <div class="card-bar" style="background:var(--gold)"></div>
-    <div class="card-inner">
-      <div class="card-eyebrow">Central Mid · Paris Saint-Germain</div>
-      <div class="card-archetype" style="background:rgba(237,187,0,0.1);color:var(--gold);border:1px solid rgba(237,187,0,0.25)">Elite Controller</div>
-      <div class="card-name" style="color:var(--white)">Vitinha</div>
-      <div class="card-meta">Age 25 · Portugal · 2025/26</div>
-      <div class="card-headline-num" style="color:var(--gold)">104.9</div>
-      <div class="card-headline-label">Touch Dominance per 90</div>
-      <div class="card-stats">
-        <div class="card-stat"><div class="v" style="color:var(--def)">93.8%</div><div class="l">Pass Security</div></div>
-        <div class="card-stat"><div class="v" style="color:var(--pass)">1.5</div><div class="l">Chance Ignition</div></div>
-        <div class="card-stat"><div class="v" style="color:var(--gold)">0.94</div><div class="l">Consistency</div></div>
-      </div>
-      <div class="card-cta" style="color:var(--gold)">
-        <span class="card-cta-text">Read the story</span>
-        <div class="card-arrow" style="border-color:rgba(237,187,0,0.4);color:var(--gold)">→</div>
-      </div>
-    </div>
-  </a>
-
-  <!-- COMING SOON -->
-  <div class="player-card card-coming">
-    <div class="card-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;text-align:center">
-      <div style="font-size:11px;letter-spacing:3px;color:var(--gray-dim);text-transform:uppercase;margin-bottom:16px">Coming Soon</div>
-      <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gray-dim);letter-spacing:2px">Next Profile</div>
-      <div style="font-size:11px;color:var(--gray-dim);margin-top:12px">Pedri · Raphinha · Bellingham</div>
-    </div>
+    <div class="coaches-badge">In Development</div>
   </div>
-
 </div>
 
 <section id="about" class="about-section">
@@ -263,17 +368,17 @@ footer{border-top:1px solid var(--gray-dim);padding:48px 40px;display:flex;justi
     <div class="about-grid">
       <div class="about-block">
         <div class="about-eyebrow">About Statsdex</div>
-        <p class="about-body">Statsdex is a data storytelling platform built by HackrLife Media LLC. We produce scroll-driven interactive data stories across football, and soon across travel, culture, finance and more. Every story combines established analytics with Statsdex proprietary metrics — Game Impact Score, Big Game Index, Consistency Score — designed to surface what standard numbers miss.</p>
+        <p class="about-body">Statsdex is a data storytelling platform built by HackrLife Media LLC. Player profiles, match reviews, coaching analysis — each story combines verified Sofascore data with Statsdex proprietary metrics: Game Impact Score, Big Game Index, Consistency Score.</p>
       </div>
       <div class="about-block">
         <div class="about-eyebrow">About BarcaFutbol</div>
-        <p class="about-body">BarcaFutbol is the flagship football editorial property of HackrLife Media LLC. Published on Beehiiv with 4,000+ subscribers, it covers FC Barcelona and the elite player ecosystem around them. Data-first, narrative-led. The analytical voice in the gap between The Athletic and StatsBomb.</p>
+        <p class="about-body">BarcaFutbol is the flagship football editorial property of HackrLife Media LLC. Published on Beehiiv with 4,000+ subscribers. Data-first, narrative-led. The analytical voice in the gap between The Athletic and StatsBomb.</p>
         <a href="https://barcafutbol.beehiiv.com" target="_blank" rel="noopener" class="about-link">Read BarcaFutbol →</a>
       </div>
       <div class="about-block">
-        <div class="about-eyebrow">Data & methodology</div>
-        <p class="about-body">Each player profile is built from Wyscout, FotMob and Sofascore — three complementary sources balanced for accuracy. Alongside xG and xA, we publish Statsdex proprietary metrics with full formula transparency. All data is sourced, dated and verified at time of publication.</p>
-        <a href="#library-header" class="about-link">Read the stories →</a>
+        <div class="about-eyebrow">Data & Methodology</div>
+        <p class="about-body">Every number traces to a Sofascore CSV row. No fabricated values. No estimated peers. All data is approved before any HTML is built — an editorial discipline that makes StatsDex the most accurate interactive football analytics platform available.</p>
+        <a href="#players" class="about-link">Explore the stories →</a>
       </div>
     </div>
     <div class="about-bottom">
@@ -290,32 +395,37 @@ footer{border-top:1px solid var(--gray-dim);padding:48px 40px;display:flex;justi
 </section>
 
 <footer>
-  <div class="footer-brand"><span>Barca</span>Futbol · Data Stories</div>
-  <div class="footer-meta">
-    HackrLife Media LLC · April 2026<br>
-    Source: Sofascore · All competitions · Per 90
-  </div>
+  <div class="footer-brand"><span>Stats</span>dex · Data Stories</div>
+  <div class="footer-meta">HackrLife Media LLC · April 2026<br>Source: Sofascore · All competitions · Per 90</div>
 </footer>
 
 <script>
-// Intersection Observer — scroll reveals
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
-    if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('visible'), i * 120);
-    }
-  });
-}, { threshold: 0.1 });
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);});
+},{threshold:0.1});
 
-document.querySelector('.section-header') && observer.observe(document.querySelector('.section-header'));
-document.querySelector('.sources-strip') && observer.observe(document.querySelector('.sources-strip'));
-document.querySelectorAll('.player-card').forEach((card, i) => {
-  setTimeout(() => observer.observe(card), i * 60);
+['players-header','matches-header','sources-strip','coaches-strip'].forEach(id=>{
+  const el=document.getElementById(id);if(el)obs.observe(el);
 });
 
-// Stagger card animations
-document.querySelectorAll('.player-card:not(.card-coming)').forEach((card, i) => {
-  card.style.transitionDelay = `${i * 0.1}s`;
+document.querySelectorAll('.card:not(.card-coming)').forEach((card,i)=>{
+  card.style.transitionDelay=`${i*0.08}s`;obs.observe(card);
+});
+
+// Pillar nav active on scroll
+const pillarObs=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const id=e.target.id;
+    document.querySelectorAll('.pillar-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.pillar-dot').forEach(d=>d.style.cssText='');
+    const btn=document.getElementById('btn-'+id);
+    if(btn){btn.classList.add('active');}
+  });
+},{threshold:0.4});
+
+['players','matches'].forEach(id=>{
+  const el=document.getElementById(id);if(el)pillarObs.observe(el);
 });
 </script>
 </body>
